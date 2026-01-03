@@ -284,6 +284,54 @@
             min-height: 60px;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            position: relative;
+        }
+
+        /* Autocomplete Suggestions */
+        .suggestions-container {
+            position: relative;
+        }
+
+        .suggestions-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-active);
+            border-radius: var(--radius-sm);
+            margin-top: 4px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .suggestions-list.show {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-subtle);
+            transition: background 0.15s ease;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item.active {
+            background: var(--bg-card);
+        }
+
+        .suggestion-item:active {
+            background: var(--bg-secondary);
         }
 
         .submit-btn {
@@ -705,9 +753,10 @@
                         <option value="spent-his">Spent his money</option>
                     </select>
                 </div>
-                <div class="form-group full-width">
+                <div class="form-group full-width suggestions-container">
                     <label for="description">Description (Optional)</label>
                     <textarea id="description" placeholder="What was this for?"></textarea>
+                    <div class="suggestions-list" id="suggestionsList"></div>
                 </div>
                 <button type="submit" class="submit-btn">Add Transaction</button>
             </form>
@@ -750,9 +799,12 @@
         // State Management
         // =====================
         const STORAGE_KEY = 'debt_ledger_transactions';
+        const DESCRIPTIONS_KEY = 'debt_ledger_descriptions';
         
         let transactions = loadTransactions();
         let selectedTransactionId = null;
+        let savedDescriptions = loadDescriptions();
+        let currentSuggestionIndex = -1;
 
         // =====================
         // LocalStorage Functions
@@ -774,6 +826,51 @@
                 console.error('Error saving transactions:', e);
                 showToast('Error saving data');
             }
+        }
+
+        function loadDescriptions() {
+            try {
+                const data = localStorage.getItem(DESCRIPTIONS_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error('Error loading descriptions:', e);
+                return [];
+            }
+        }
+
+        function saveDescriptions() {
+            try {
+                localStorage.setItem(DESCRIPTIONS_KEY, JSON.stringify(savedDescriptions));
+            } catch (e) {
+                console.error('Error saving descriptions:', e);
+            }
+        }
+
+        function addDescription(description) {
+            const trimmed = description.trim();
+            if (!trimmed || trimmed.length < 2) return;
+            
+            // Remove if already exists (to avoid duplicates)
+            savedDescriptions = savedDescriptions.filter(d => d.toLowerCase() !== trimmed.toLowerCase());
+            
+            // Add to beginning (most recent first)
+            savedDescriptions.unshift(trimmed);
+            
+            // Keep only last 10 descriptions
+            if (savedDescriptions.length > 10) {
+                savedDescriptions = savedDescriptions.slice(0, 10);
+            }
+            
+            saveDescriptions();
+        }
+
+        function getMatchingDescriptions(input) {
+            const trimmed = input.trim().toLowerCase();
+            if (!trimmed) return savedDescriptions.slice(0, 5);
+            
+            return savedDescriptions
+                .filter(desc => desc.toLowerCase().includes(trimmed))
+                .slice(0, 5);
         }
 
         // =====================
@@ -968,6 +1065,11 @@
                 timestamp: Date.now()
             };
             
+            // Save description for future use
+            if (tx.description) {
+                addDescription(tx.description);
+            }
+            
             transactions.push(tx);
             saveTransactions();
             updateDashboard();
@@ -1081,6 +1183,98 @@
             
             if (diff > 100) {
                 closeModal();
+            }
+        });
+
+        // =====================
+        // Autocomplete for Description
+        // =====================
+        const descriptionInput = document.getElementById('description');
+        const suggestionsList = document.getElementById('suggestionsList');
+
+        function showSuggestions(matches) {
+            if (matches.length === 0) {
+                suggestionsList.classList.remove('show');
+                return;
+            }
+
+            suggestionsList.innerHTML = matches.map(desc => 
+                `<div class="suggestion-item">${escapeHtml(desc)}</div>`
+            ).join('');
+
+            suggestionsList.classList.add('show');
+            currentSuggestionIndex = -1;
+
+            // Add click listeners
+            suggestionsList.querySelectorAll('.suggestion-item').forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    descriptionInput.value = matches[index];
+                    suggestionsList.classList.remove('show');
+                });
+            });
+        }
+
+        function hideSuggestions() {
+            suggestionsList.classList.remove('show');
+            currentSuggestionIndex = -1;
+        }
+
+        descriptionInput.addEventListener('input', (e) => {
+            const matches = getMatchingDescriptions(e.target.value);
+            showSuggestions(matches);
+        });
+
+        descriptionInput.addEventListener('focus', (e) => {
+            if (savedDescriptions.length > 0) {
+                const matches = getMatchingDescriptions(e.target.value);
+                showSuggestions(matches);
+            }
+        });
+
+        descriptionInput.addEventListener('blur', (e) => {
+            // Delay to allow click on suggestion
+            setTimeout(() => hideSuggestions(), 200);
+        });
+
+        descriptionInput.addEventListener('keydown', (e) => {
+            const items = suggestionsList.querySelectorAll('.suggestion-item');
+            
+            if (!suggestionsList.classList.contains('show') || items.length === 0) {
+                return;
+            }
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                currentSuggestionIndex = (currentSuggestionIndex + 1) % items.length;
+                updateActiveSuggestion(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                currentSuggestionIndex = currentSuggestionIndex <= 0 ? items.length - 1 : currentSuggestionIndex - 1;
+                updateActiveSuggestion(items);
+            } else if (e.key === 'Enter' && currentSuggestionIndex >= 0) {
+                e.preventDefault();
+                descriptionInput.value = items[currentSuggestionIndex].textContent;
+                hideSuggestions();
+            } else if (e.key === 'Escape') {
+                hideSuggestions();
+            }
+        });
+
+        function updateActiveSuggestion(items) {
+            items.forEach((item, index) => {
+                if (index === currentSuggestionIndex) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!descriptionInput.contains(e.target) && !suggestionsList.contains(e.target)) {
+                hideSuggestions();
             }
         });
     </script>
