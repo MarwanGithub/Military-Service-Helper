@@ -1271,7 +1271,7 @@
             // Format as text (Arabic only)
             let text = `${translations.debtLedger}\n`;
             text += `${translations.latest} ${sorted.length} ${translations.transactions}\n`;
-            text += `${translations.generated}: ${new Date().toLocaleString()}\n`;
+            text += `${formatTimestamp(Date.now())} :${translations.generated}\n`;
             text += `${translations.netPosition}: ${calculateNetPosition() >= 0 ? '+' : ''}$${calculateNetPosition().toFixed(2)}\n\n`;
 
             sorted.forEach((tx) => {
