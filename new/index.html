@@ -291,51 +291,124 @@
             position: relative;
         }
 
-        /* Autocomplete Suggestions */
-        .suggestions-container {
-            position: relative;
+        /* Category Toggle Buttons */
+        .category-toggle {
+            display: flex;
+            gap: 10px;
         }
 
-        .suggestions-list {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border-active);
-            border-radius: var(--radius-sm);
-            margin-top: 4px;
-            max-height: 150px;
-            overflow-y: auto;
-            z-index: 10;
-            display: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .suggestions-list.show {
-            display: block;
-        }
-
-        .suggestion-item {
-            padding: 10px 12px;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--border-subtle);
-            transition: background 0.15s ease;
-        }
-
-        .suggestion-item:last-child {
-            border-bottom: none;
-        }
-
-        .suggestion-item:hover,
-        .suggestion-item.active {
+        .category-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
             background: var(--bg-card);
+            border: 2px solid var(--border-subtle);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
         }
 
-        .suggestion-item:active {
-            background: var(--bg-secondary);
+        .category-btn:hover {
+            border-color: var(--border-active);
+        }
+
+        .category-btn .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .category-btn.received .dot {
+            background: var(--accent-green);
+            opacity: 0.4;
+        }
+
+        .category-btn.spent .dot {
+            background: var(--accent-red);
+            opacity: 0.4;
+        }
+
+        .category-btn.received.active {
+            border-color: var(--accent-green);
+            background: rgba(0, 214, 143, 0.1);
+            color: var(--accent-green);
+        }
+
+        .category-btn.received.active .dot {
+            opacity: 1;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .category-btn.spent.active {
+            border-color: var(--accent-red);
+            background: rgba(255, 92, 108, 0.1);
+            color: var(--accent-red);
+        }
+
+        .category-btn.spent.active .dot {
+            opacity: 1;
+            box-shadow: 0 0 8px var(--accent-red);
+        }
+
+        /* Description Recommendations */
+        .recommendations-container {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .recommendations-container.show {
+            display: flex;
+        }
+
+        .recommendations-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .recommendations-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .recommendation-chip {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-family: inherit;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            max-width: 140px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recommendation-chip:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-green);
+            color: var(--text-primary);
+        }
+
+        .recommendation-chip:active {
+            transform: scale(0.95);
         }
 
         .submit-btn {
@@ -751,16 +824,26 @@
                     </div>
                 </div>
                 <div class="form-group full-width">
-                    <label for="category">Category</label>
-                    <select id="category" required>
-                        <option value="received">Received from him</option>
-                        <option value="spent-his">Spent his money</option>
-                    </select>
+                    <label>Category</label>
+                    <div class="category-toggle">
+                        <button type="button" class="category-btn received active" data-value="received">
+                            <span class="dot"></span>
+                            Received
+                        </button>
+                        <button type="button" class="category-btn spent" data-value="spent-his">
+                            <span class="dot"></span>
+                            Spent
+                        </button>
+                    </div>
+                    <input type="hidden" id="category" value="received">
                 </div>
-                <div class="form-group full-width suggestions-container">
+                <div class="form-group full-width">
                     <label for="description">Description (Optional)</label>
                     <textarea id="description" placeholder="What was this for?"></textarea>
-                    <div class="suggestions-list" id="suggestionsList"></div>
+                </div>
+                <div class="recommendations-container" id="recommendationsContainer">
+                    <span class="recommendations-label">Recent descriptions</span>
+                    <div class="recommendations-list" id="recommendationsList"></div>
                 </div>
                 <button type="submit" class="submit-btn">Add Transaction</button>
             </form>
@@ -808,7 +891,6 @@
         let transactions = loadTransactions();
         let selectedTransactionId = null;
         let savedDescriptions = loadDescriptions();
-        let currentSuggestionIndex = -1;
 
         // =====================
         // LocalStorage Functions
@@ -1154,7 +1236,27 @@
             document.getElementById('amount').value = '';
             document.getElementById('description').value = '';
             document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            
+            // Reset category toggle
             document.getElementById('category').value = 'received';
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.value === 'received') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Refresh recommendations
+            updateRecommendations();
+        });
+
+        // Category toggle buttons
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('category').value = btn.dataset.value;
+            });
         });
 
         // Modal close
@@ -1191,95 +1293,39 @@
         });
 
         // =====================
-        // Autocomplete for Description
+        // Description Recommendations
         // =====================
         const descriptionInput = document.getElementById('description');
-        const suggestionsList = document.getElementById('suggestionsList');
+        const recommendationsContainer = document.getElementById('recommendationsContainer');
+        const recommendationsList = document.getElementById('recommendationsList');
 
-        function showSuggestions(matches) {
-            if (matches.length === 0) {
-                suggestionsList.classList.remove('show');
+        function updateRecommendations() {
+            // Get last 6 descriptions
+            const recentDescriptions = savedDescriptions.slice(0, 6);
+            
+            if (recentDescriptions.length === 0) {
+                recommendationsContainer.classList.remove('show');
                 return;
             }
 
-            suggestionsList.innerHTML = matches.map(desc => 
-                `<div class="suggestion-item">${escapeHtml(desc)}</div>`
+            recommendationsList.innerHTML = recentDescriptions.map(desc => 
+                `<button type="button" class="recommendation-chip" title="${escapeHtml(desc)}">${escapeHtml(desc)}</button>`
             ).join('');
 
-            suggestionsList.classList.add('show');
-            currentSuggestionIndex = -1;
+            recommendationsContainer.classList.add('show');
 
             // Add click listeners
-            suggestionsList.querySelectorAll('.suggestion-item').forEach((item, index) => {
-                item.addEventListener('click', () => {
-                    descriptionInput.value = matches[index];
-                    suggestionsList.classList.remove('show');
+            recommendationsList.querySelectorAll('.recommendation-chip').forEach((chip, index) => {
+                chip.addEventListener('click', () => {
+                    descriptionInput.value = recentDescriptions[index];
+                    descriptionInput.focus();
                 });
             });
         }
 
-        function hideSuggestions() {
-            suggestionsList.classList.remove('show');
-            currentSuggestionIndex = -1;
-        }
-
-        descriptionInput.addEventListener('input', (e) => {
-            const matches = getMatchingDescriptions(e.target.value);
-            showSuggestions(matches);
-        });
-
-        descriptionInput.addEventListener('focus', (e) => {
-            if (savedDescriptions.length > 0) {
-                const matches = getMatchingDescriptions(e.target.value);
-                showSuggestions(matches);
-            }
-        });
-
-        descriptionInput.addEventListener('blur', (e) => {
-            // Delay to allow click on suggestion
-            setTimeout(() => hideSuggestions(), 200);
-        });
-
-        descriptionInput.addEventListener('keydown', (e) => {
-            const items = suggestionsList.querySelectorAll('.suggestion-item');
-            
-            if (!suggestionsList.classList.contains('show') || items.length === 0) {
-                return;
-            }
-
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                currentSuggestionIndex = (currentSuggestionIndex + 1) % items.length;
-                updateActiveSuggestion(items);
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                currentSuggestionIndex = currentSuggestionIndex <= 0 ? items.length - 1 : currentSuggestionIndex - 1;
-                updateActiveSuggestion(items);
-            } else if (e.key === 'Enter' && currentSuggestionIndex >= 0) {
-                e.preventDefault();
-                descriptionInput.value = items[currentSuggestionIndex].textContent;
-                hideSuggestions();
-            } else if (e.key === 'Escape') {
-                hideSuggestions();
-            }
-        });
-
-        function updateActiveSuggestion(items) {
-            items.forEach((item, index) => {
-                if (index === currentSuggestionIndex) {
-                    item.classList.add('active');
-                    item.scrollIntoView({ block: 'nearest' });
-                } else {
-                    item.classList.remove('active');
-                }
-            });
-        }
-
-        // Hide suggestions when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!descriptionInput.contains(e.target) && !suggestionsList.contains(e.target)) {
-                hideSuggestions();
-            }
+        // Initialize recommendations on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateRecommendations();
         });
 
         // =====================
