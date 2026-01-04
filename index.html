@@ -443,6 +443,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .section-title {
@@ -480,6 +482,49 @@
         .clear-btn:hover {
             border-color: var(--accent-red);
             color: var(--accent-red);
+        }
+
+        .copy-controls {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .copy-input {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 6px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-primary);
+            width: 40px;
+            text-align: center;
+        }
+
+        .copy-input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
         }
 
         .transactions-list {
@@ -781,6 +826,16 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .copy-controls {
+                width: 100%;
+                justify-content: flex-end;
+            }
         }
 
         @media (min-width: 481px) {
@@ -849,7 +904,11 @@
         <section class="history-section">
             <div class="section-header">
                 <h2 class="section-title">Recent Transactions</h2>
-                <button class="clear-btn" id="clearAllBtn">Clear All</button>
+                <div class="copy-controls">
+                    <input type="number" class="copy-input" id="copyCount" value="5" min="1" max="100">
+                    <button class="copy-btn" id="copyBtn">Copy</button>
+                    <button class="clear-btn" id="clearAllBtn">Clear All</button>
+                </div>
             </div>
             <div class="transactions-list" id="transactionsList">
                 <!-- Transactions will be inserted here -->
@@ -1180,6 +1239,83 @@
             }
         }
 
+        function copyTransactionsToClipboard(count) {
+            if (transactions.length === 0) {
+                showToast('No transactions to copy');
+                return;
+            }
+
+            // Get the latest N transactions
+            const sorted = [...transactions]
+                .sort((a, b) => {
+                    const dateCompare = new Date(b.date) - new Date(a.date);
+                    if (dateCompare !== 0) return dateCompare;
+                    return b.timestamp - a.timestamp;
+                })
+                .slice(0, count);
+
+            // Arabic translations
+            const translations = {
+                received: 'مستلم',
+                spent: 'صرفت',
+                amount: 'المبلغ',
+                description: 'الوصف',
+                added: 'أضيف',
+                netPosition: 'الرصيد الصافي',
+                generated: 'تم الإنشاء',
+                transactions: sorted.length > 1 ? 'معاملات' : 'معاملة',
+                debtLedger: 'دفتر الديون',
+                latest: 'آخر'
+            };
+
+            // Format as text (Arabic only)
+            let text = `${translations.debtLedger}\n`;
+            text += `${translations.latest} ${sorted.length} ${translations.transactions}\n`;
+            text += `${translations.generated}: ${new Date().toLocaleString()}\n`;
+            text += `${translations.netPosition}: ${calculateNetPosition() >= 0 ? '+' : ''}$${calculateNetPosition().toFixed(2)}\n\n`;
+
+            sorted.forEach((tx) => {
+                const sign = tx.category === 'received' ? '+' : '-';
+                const categoryArabic = tx.category === 'received' ? translations.received : translations.spent;
+                
+                text += `${categoryArabic}\n`;
+                text += `${translations.amount}: ${sign}$${tx.amount.toFixed(2)}\n`;
+                if (tx.description) {
+                    text += `${translations.description}: ${tx.description}\n`;
+                }
+                text += `${translations.added}: ${formatTimestamp(tx.timestamp)}\n`;
+                text += '\n';
+            });
+
+            // Copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        showToast(`Copied ${sorted.length} transaction${sorted.length > 1 ? 's' : ''}`);
+                    })
+                    .catch((err) => {
+                        console.error('Failed to copy:', err);
+                        showToast('Failed to copy to clipboard');
+                    });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast(`Copied ${sorted.length} transaction${sorted.length > 1 ? 's' : ''}`);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                    showToast('Failed to copy to clipboard');
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
         }
@@ -1272,6 +1408,16 @@
 
         // Clear all
         document.getElementById('clearAllBtn').addEventListener('click', clearAllTransactions);
+
+        // Copy transactions
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const count = parseInt(document.getElementById('copyCount').value) || 5;
+            if (count < 1 || count > 100) {
+                showToast('Please enter a number between 1 and 100');
+                return;
+            }
+            copyTransactionsToClipboard(count);
+        });
 
         // Swipe down to close modal
         let touchStartY = 0;
