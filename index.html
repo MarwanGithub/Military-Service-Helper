@@ -877,16 +877,16 @@
                 <div class="form-group full-width">
                     <label>Category</label>
                     <div class="category-toggle">
-                        <button type="button" class="category-btn received active" data-value="received">
-                            <span class="dot"></span>
-                            Received
-                        </button>
-                        <button type="button" class="category-btn spent" data-value="spent-his">
+                        <button type="button" class="category-btn spent active" data-value="spent-his">
                             <span class="dot"></span>
                             Spent
                         </button>
+                        <button type="button" class="category-btn received" data-value="received">
+                            <span class="dot"></span>
+                            Received
+                        </button>
                     </div>
-                    <input type="hidden" id="category" value="received">
+                    <input type="hidden" id="category" value="spent-his">
                 </div>
                 <div class="form-group full-width">
                     <label for="description">Description (Optional)</label>
@@ -1032,7 +1032,7 @@
 
         function getPositionDescription(amount) {
             if (amount > 0) {
-                return `I have <strong>$${Math.abs(amount).toFixed(2)}</strong> of his money left`;
+                return `I have <strong>$${Math.abs(amount).toFixed(2)}</strong>`;
             } else if (amount < 0) {
                 return `He owes me <strong>$${Math.abs(amount).toFixed(2)}</strong>`;
             }
@@ -1370,10 +1370,10 @@
             document.getElementById('date').value = new Date().toISOString().split('T')[0];
             
             // Reset category toggle
-            document.getElementById('category').value = 'received';
+            document.getElementById('category').value = 'spent-his';
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.dataset.value === 'received') {
+                if (btn.dataset.value === 'spent-his') {
                     btn.classList.add('active');
                 }
             });
