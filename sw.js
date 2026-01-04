@@ -34,36 +34,26 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - Network First strategy (always try to get fresh content)
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then((response) => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        
-        // Clone the request
-        const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest).then((response) => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+        // Got response from network, cache it and return
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache);
+        });
+        return response;
+      })
+      .catch(() => {
+        // Network failed, try cache (offline mode)
+        return caches.match(event.request).then((response) => {
+          if (response) {
+            console.log('[SW] Serving from cache:', event.request.url);
             return response;
           }
-          
-          // Clone the response
-          const responseToCache = response.clone();
-          
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-          
-          return response;
-        }).catch(() => {
-          // Network request failed, app is offline but cache miss
-          // Return a basic offline response if needed
+          // Not in cache either
           return new Response('Offline - resource not cached', {
             status: 503,
             statusText: 'Service Unavailable',
@@ -75,4 +65,3 @@ self.addEventListener('fetch', (event) => {
       })
   );
 });
-
