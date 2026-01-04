@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="description" content="Track money exchanges and debts">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkRlYnQgTGVkZ2VyIiwKICAic2hvcnRfbmFtZSI6ICJMZWRnZXIiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBhMGEwZiIsCiAgInRoZW1lX2NvbG9yIjogIiMwYTBhMGYiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmclMjB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnJTIwd2lkdGg9JzE5MiclMjBoZWlnaHQ9JzE5MiclMjB2aWV3Qm94PScwJTIwMCUyMDE5MiUyMDE5MiclM0UlM0NyZWN0JTIwd2lkdGg9JzE5MiclMjBoZWlnaHQ9JzE5MiclMjBmaWxsPSclMjMwYTBhMGYnLyUzRSUzQ3RleHQlMjB4PScxMDAlMjB5PScxMDAnJTIwZm9udC1mYW1pbHk9J0FyaWFsJyUyMGZvbnQtc2l6ZT0nODAnJTIwdGV4dC1hbmNob3I9J21pZGRsZSclMjBmaWxsPSclMjMwMGQ2OGYnJTIwZG9taW5hbnQtYmFzZWxpbmU9J21pZGRsZSclM0UkJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnJTIweG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyUyMHdpZHRoPSc1MTInJTIwaGVpZ2h0PSc1MTInJTIwdmlld0JveD0nMCUyMDAlMjA1MTIlMjA1MTInJTNFJTNDcmVjdCUyMHdpZHRoPSc1MTInJTIwaGVpZ2h0PSc1MTInJTIwZmlsbD0nJTIzMGEwYTBmJy8lM0UlM0N0ZXh0JTIweD0nMjU2JyUyMHk9JzI3MCclMjBmb250LWZhbWlseT0nQXJpYWwnJTIwZm9udC1zaXplPScyNDAnJTIwdGV4dC1hbmNob3I9J21pZGRsZSclMjBmaWxsPSclMjMwMGQ2OGYnJTIwZG9taW5hbnQtYmFzZWxpbmU9J21pZGRsZSclM0UkJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
     <title>Debt Ledger</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"></noscript>
     <style>
         :root {
             --bg-primary: #0a0a0f;
@@ -1277,6 +1281,91 @@
                 hideSuggestions();
             }
         });
+
+        // =====================
+        // Service Worker Registration (PWA Offline Support)
+        // =====================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Create inline service worker
+                const swCode = `
+                    const CACHE_NAME = 'debt-ledger-v2';
+                    const urlsToCache = [
+                        './',
+                        './index.html'
+                    ];
+
+                    self.addEventListener('install', (event) => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+                        );
+                        self.skipWaiting();
+                    });
+
+                    self.addEventListener('fetch', (event) => {
+                        const url = event.request.url;
+                        
+                        // Always try network first for Google Fonts to avoid blocking
+                        if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
+                            event.respondWith(
+                                fetch(event.request)
+                                    .then((response) => {
+                                        const responseClone = response.clone();
+                                        caches.open(CACHE_NAME).then((cache) => {
+                                            cache.put(event.request, responseClone);
+                                        });
+                                        return response;
+                                    })
+                                    .catch(() => {
+                                        return caches.match(event.request);
+                                    })
+                            );
+                            return;
+                        }
+
+                        // For everything else, cache first
+                        event.respondWith(
+                            caches.match(event.request).then((response) => {
+                                return response || fetch(event.request).then((fetchResponse) => {
+                                    return caches.open(CACHE_NAME).then((cache) => {
+                                        cache.put(event.request, fetchResponse.clone());
+                                        return fetchResponse;
+                                    });
+                                }).catch(() => {
+                                    return caches.match('./index.html');
+                                });
+                            })
+                        );
+                    });
+
+                    self.addEventListener('activate', (event) => {
+                        event.waitUntil(
+                            caches.keys().then((cacheNames) => {
+                                return Promise.all(
+                                    cacheNames.map((cacheName) => {
+                                        if (cacheName !== CACHE_NAME) {
+                                            return caches.delete(cacheName);
+                                        }
+                                    })
+                                );
+                            })
+                        );
+                        return self.clients.claim();
+                    });
+                `;
+
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+
+                navigator.serviceWorker.register(swUrl)
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
