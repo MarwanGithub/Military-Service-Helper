@@ -287,6 +287,19 @@
             position: relative;
         }
 
+        /* Remove number input spinners */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
         /* Category Toggle Buttons */
         .category-toggle {
             display: flex;
@@ -447,6 +460,10 @@
             gap: 10px;
         }
 
+        .section-header:has(.copy-controls) {
+            justify-content: center;
+        }
+
         .section-title {
             font-size: 13px;
             font-weight: 600;
@@ -488,6 +505,7 @@
             display: flex;
             gap: 6px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .copy-input {
@@ -525,6 +543,99 @@
         .copy-btn:hover {
             border-color: var(--accent-green);
             color: var(--accent-green);
+        }
+
+        .view-all-btn {
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .view-all-btn:hover {
+            border-color: var(--accent-amber);
+            color: var(--accent-amber);
+        }
+
+        /* All Transactions Page */
+        .all-transactions-page {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 50;
+            overflow-y: auto;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .all-transactions-page.active {
+            display: block;
+        }
+
+        .all-transactions-header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .back-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+
+        .back-btn:hover {
+            border-color: var(--border-active);
+            background: var(--bg-elevated);
+        }
+
+        .all-transactions-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .transaction-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .all-transactions-content {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+
+        .all-transactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .transactions-list {
@@ -832,9 +943,16 @@
                 align-items: flex-start;
             }
 
-            .copy-controls {
+            .section-title {
                 width: 100%;
-                justify-content: flex-end;
+            }
+
+            .copy-controls {
+                justify-content: center;
+            }
+
+            .view-all-btn {
+                margin-left: auto;
             }
         }
 
@@ -874,6 +992,9 @@
                         <input type="date" id="date" required>
                     </div>
                 </div>
+                <div class="recommendations-container" id="amountRecommendationsContainer">
+                    <div class="recommendations-list" id="amountRecommendationsList"></div>
+                </div>
                 <div class="form-group full-width">
                     <label>Category</label>
                     <div class="category-toggle">
@@ -904,16 +1025,35 @@
         <section class="history-section">
             <div class="section-header">
                 <h2 class="section-title">Recent Transactions</h2>
-                <div class="copy-controls">
-                    <input type="number" class="copy-input" id="copyCount" value="5" min="1" max="100">
-                    <button class="copy-btn" id="copyBtn">Copy</button>
-                    <button class="clear-btn" id="clearAllBtn">Clear All</button>
-                </div>
+                <button class="view-all-btn" id="viewAllBtn">View All</button>
             </div>
             <div class="transactions-list" id="transactionsList">
                 <!-- Transactions will be inserted here -->
             </div>
+            <div class="section-header" style="margin-top: 20px; justify-content: center;">
+                <button class="clear-btn" id="clearAllBtn">Clear All</button>
+            </div>
         </section>
+    </div>
+
+    <!-- All Transactions Page -->
+    <div class="all-transactions-page" id="allTransactionsPage">
+        <div class="all-transactions-header">
+            <button class="back-btn" id="backBtn">←</button>
+            <h2 class="all-transactions-title">All Transactions</h2>
+            <span class="transaction-count" id="transactionCount">0</span>
+        </div>
+        <div class="all-transactions-content">
+            <div class="section-header" style="margin-bottom: 16px;">
+                <div class="copy-controls">
+                    <input type="number" class="copy-input" id="copyCount" value="5" min="1" max="100">
+                    <button class="copy-btn" id="copyBtn">Copy</button>
+                </div>
+            </div>
+            <div class="all-transactions-list" id="allTransactionsList">
+                <!-- All transactions will be inserted here -->
+            </div>
+        </div>
     </div>
 
     <!-- Detail Modal -->
@@ -942,10 +1082,12 @@
         // =====================
         const STORAGE_KEY = 'debt_ledger_transactions';
         const DESCRIPTIONS_KEY = 'debt_ledger_descriptions';
+        const AMOUNTS_KEY = 'debt_ledger_amounts';
         
         let transactions = loadTransactions();
         let selectedTransactionId = null;
         let savedDescriptions = loadDescriptions();
+        let savedAmounts = loadAmounts();
 
         // =====================
         // LocalStorage Functions
@@ -1014,6 +1156,42 @@
                 .slice(0, 5);
         }
 
+        function loadAmounts() {
+            try {
+                const data = localStorage.getItem(AMOUNTS_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error('Error loading amounts:', e);
+                return [];
+            }
+        }
+
+        function saveAmounts() {
+            try {
+                localStorage.setItem(AMOUNTS_KEY, JSON.stringify(savedAmounts));
+            } catch (e) {
+                console.error('Error saving amounts:', e);
+            }
+        }
+
+        function addAmount(amount) {
+            const numAmount = parseFloat(amount);
+            if (!numAmount || numAmount <= 0) return;
+            
+            // Remove if already exists (to avoid duplicates)
+            savedAmounts = savedAmounts.filter(a => a !== numAmount);
+            
+            // Add to beginning (most recent first)
+            savedAmounts.unshift(numAmount);
+            
+            // Keep only last 8 amounts
+            if (savedAmounts.length > 8) {
+                savedAmounts = savedAmounts.slice(0, 8);
+            }
+            
+            saveAmounts();
+        }
+
         // =====================
         // Core Logic
         // =====================
@@ -1067,6 +1245,7 @@
 
         function renderTransactions() {
             const list = document.getElementById('transactionsList');
+            const viewAllBtn = document.getElementById('viewAllBtn');
             
             if (transactions.length === 0) {
                 list.innerHTML = `
@@ -1075,7 +1254,17 @@
                         <p>No transactions yet.<br>Add one above to get started.</p>
                     </div>
                 `;
+                viewAllBtn.style.display = 'none';
                 return;
+            }
+            
+            // Update View All button text
+            if (transactions.length > 5) {
+                viewAllBtn.textContent = `View All (${transactions.length})`;
+                viewAllBtn.style.display = 'block';
+            } else {
+                viewAllBtn.textContent = 'View All';
+                viewAllBtn.style.display = transactions.length > 0 ? 'block' : 'none';
             }
             
             // Sort by date descending, then by timestamp descending
@@ -1085,7 +1274,7 @@
                     if (dateCompare !== 0) return dateCompare;
                     return b.timestamp - a.timestamp;
                 })
-                .slice(0, 10);
+                .slice(0, 5);
             
             list.innerHTML = sorted.map(tx => {
                 const typeClass = `type-${tx.category}`;
@@ -1109,6 +1298,65 @@
             list.querySelectorAll('.receipt').forEach(el => {
                 el.addEventListener('click', () => openModal(el.dataset.id));
             });
+        }
+
+        function renderAllTransactions() {
+            const list = document.getElementById('allTransactionsList');
+            const countEl = document.getElementById('transactionCount');
+            
+            countEl.textContent = transactions.length;
+            
+            if (transactions.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <p>No transactions yet.<br>Add one to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort by date descending, then by timestamp descending (NO LIMIT)
+            const sorted = [...transactions]
+                .sort((a, b) => {
+                    const dateCompare = new Date(b.date) - new Date(a.date);
+                    if (dateCompare !== 0) return dateCompare;
+                    return b.timestamp - a.timestamp;
+                });
+            
+            list.innerHTML = sorted.map(tx => {
+                const typeClass = `type-${tx.category}`;
+                const typeLabel = getCategoryLabel(tx.category);
+                const sign = tx.category === 'received' ? '+' : '-';
+                const formattedDate = formatDate(tx.date);
+                
+                return `
+                    <div class="receipt ${typeClass}" data-id="${tx.id}">
+                        <div class="receipt-header">
+                            <span class="receipt-type">${typeLabel}</span>
+                            <span class="receipt-amount">${sign}$${tx.amount.toFixed(2)}</span>
+                        </div>
+                        <p class="receipt-date">${formattedDate}</p>
+                        ${tx.description ? `<p class="receipt-desc">${escapeHtml(tx.description)}</p>` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            // Add click listeners
+            list.querySelectorAll('.receipt').forEach(el => {
+                el.addEventListener('click', () => openModal(el.dataset.id));
+            });
+        }
+
+        function openAllTransactionsPage() {
+            document.getElementById('allTransactionsPage').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderAllTransactions();
+        }
+
+        function closeAllTransactionsPage() {
+            document.getElementById('allTransactionsPage').classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         function getCategoryLabel(category) {
@@ -1211,6 +1459,9 @@
                 addDescription(tx.description);
             }
             
+            // Save amount for future use
+            addAmount(tx.amount);
+            
             transactions.push(tx);
             saveTransactions();
             updateDashboard();
@@ -1223,6 +1474,10 @@
             saveTransactions();
             updateDashboard();
             renderTransactions();
+            // Update all transactions page if it's open
+            if (document.getElementById('allTransactionsPage').classList.contains('active')) {
+                renderAllTransactions();
+            }
             closeModal();
             showToast('Transaction deleted');
         }
@@ -1235,6 +1490,10 @@
                 saveTransactions();
                 updateDashboard();
                 renderTransactions();
+                // Update all transactions page if it's open
+                if (document.getElementById('allTransactionsPage').classList.contains('active')) {
+                    renderAllTransactions();
+                }
                 showToast('All transactions cleared');
             }
         }
@@ -1380,6 +1639,7 @@
             
             // Refresh recommendations
             updateRecommendations();
+            updateAmountRecommendations();
         });
 
         // Category toggle buttons
@@ -1417,6 +1677,19 @@
                 return;
             }
             copyTransactionsToClipboard(count);
+        });
+
+        // View All button
+        document.getElementById('viewAllBtn').addEventListener('click', openAllTransactionsPage);
+
+        // Back button
+        document.getElementById('backBtn').addEventListener('click', closeAllTransactionsPage);
+
+        // Escape key to close all transactions page
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('allTransactionsPage').classList.contains('active')) {
+                closeAllTransactionsPage();
+            }
         });
 
         // Swipe down to close modal
@@ -1468,6 +1741,42 @@
         // Initialize recommendations on page load
         document.addEventListener('DOMContentLoaded', () => {
             updateRecommendations();
+        });
+
+        // =====================
+        // Amount Recommendations
+        // =====================
+        const amountInput = document.getElementById('amount');
+        const amountRecommendationsContainer = document.getElementById('amountRecommendationsContainer');
+        const amountRecommendationsList = document.getElementById('amountRecommendationsList');
+
+        function updateAmountRecommendations() {
+            // Get last 4 amounts
+            const recentAmounts = savedAmounts.slice(0, 4);
+            
+            if (recentAmounts.length === 0) {
+                amountRecommendationsContainer.classList.remove('show');
+                return;
+            }
+
+            amountRecommendationsList.innerHTML = recentAmounts.map(amount => 
+                `<button type="button" class="recommendation-chip" title="$${amount.toFixed(2)}">$${amount.toFixed(2)}</button>`
+            ).join('');
+
+            amountRecommendationsContainer.classList.add('show');
+
+            // Add click listeners
+            amountRecommendationsList.querySelectorAll('.recommendation-chip').forEach((chip, index) => {
+                chip.addEventListener('click', () => {
+                    amountInput.value = recentAmounts[index].toFixed(2);
+                    amountInput.focus();
+                });
+            });
+        }
+
+        // Initialize amount recommendations on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAmountRecommendations();
         });
 
         // =====================
