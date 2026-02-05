@@ -77,14 +77,21 @@
 
         /* Header */
         .header {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 24px;
             animation: fadeDown 0.6s ease-out;
+            position: relative;
         }
 
         @keyframes fadeDown {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-content {
+            text-align: center;
         }
 
         .header h1 {
@@ -99,6 +106,220 @@
         .header .subtitle {
             font-size: 12px;
             color: var(--text-muted);
+        }
+
+        /* Hamburger Menu Button */
+        .menu-btn {
+            position: absolute;
+            left: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .menu-btn:hover {
+            border-color: var(--accent-amber);
+            background: var(--bg-elevated);
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text-secondary);
+            border-radius: 1px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-btn:hover span {
+            background: var(--accent-amber);
+        }
+
+        /* Side Drawer */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            max-width: 85vw;
+            background: var(--bg-secondary);
+            z-index: 201;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .drawer-overlay.active .drawer {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .drawer-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .drawer-close {
+            background: var(--bg-elevated);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .drawer-close:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .drawer-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .drawer-section {
+            margin-bottom: 16px;
+        }
+
+        .drawer-section-title {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 12px;
+        }
+
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 12px;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-sm);
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .drawer-item:hover {
+            background: var(--bg-card);
+        }
+
+        .drawer-item-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .drawer-item.main-ledger .drawer-item-icon {
+            background: rgba(0, 214, 143, 0.15);
+        }
+
+        .drawer-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .drawer-item-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .drawer-item-balance {
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .drawer-item-balance.positive { color: var(--accent-green); }
+        .drawer-item-balance.negative { color: var(--accent-red); }
+        .drawer-item-balance.neutral { color: var(--text-muted); }
+
+        .drawer-item.main-ledger .drawer-item-name {
+            color: var(--accent-green);
+        }
+
+        .drawer-create-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: transparent;
+            border: 1px dashed var(--border-active);
+            border-radius: var(--radius-sm);
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .drawer-create-btn:hover {
+            border-color: var(--accent-amber);
+            color: var(--accent-amber);
+            background: rgba(255, 181, 71, 0.1);
         }
 
         /* Dashboard Card */
@@ -961,14 +1182,341 @@
                 padding: 32px 24px;
             }
         }
+
+        /* Side Ledgers Section */
+        .side-ledgers-section {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+            animation: fadeUp 0.6s ease-out 0.4s both;
+        }
+
+        .side-ledgers-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .create-ledger-btn {
+            background: transparent;
+            border: 1px solid var(--accent-amber);
+            border-radius: var(--radius-sm);
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--accent-amber);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .create-ledger-btn:hover {
+            background: var(--accent-amber);
+            color: #000;
+        }
+
+        .side-ledgers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .side-ledger-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .side-ledger-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent-amber);
+        }
+
+        .side-ledger-card:hover {
+            border-color: var(--border-active);
+            transform: translateX(4px);
+        }
+
+        .side-ledger-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .side-ledger-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .side-ledger-balance {
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .side-ledger-balance.positive { color: var(--accent-green); }
+        .side-ledger-balance.negative { color: var(--accent-red); }
+        .side-ledger-balance.neutral { color: var(--text-secondary); }
+
+        .side-ledger-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .side-ledgers-empty {
+            text-align: center;
+            padding: 32px 24px;
+            color: var(--text-muted);
+        }
+
+        .side-ledgers-empty-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            opacity: 0.5;
+        }
+
+        /* Side Ledger Page */
+        .side-ledger-page {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 50;
+            overflow-y: auto;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .side-ledger-page.active {
+            display: block;
+        }
+
+        .side-ledger-page-header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .side-ledger-page-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .side-ledger-delete-btn {
+            background: transparent;
+            border: 1px solid var(--accent-red);
+            border-radius: var(--radius-sm);
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--accent-red);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .side-ledger-delete-btn:hover {
+            background: var(--accent-red);
+            color: #000;
+        }
+
+        .side-ledger-page-content {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+
+        .side-ledger-dashboard {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 24px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .side-ledger-dashboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);
+            opacity: 0.6;
+        }
+
+        .side-ledger-dashboard.positive::before {
+            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+        }
+
+        .side-ledger-dashboard.negative::before {
+            background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+        }
+
+        .side-ledger-position-amount {
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+            font-size: 36px;
+            font-weight: 500;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .side-ledger-dashboard.positive .side-ledger-position-amount { color: var(--accent-green); }
+        .side-ledger-dashboard.negative .side-ledger-position-amount { color: var(--accent-red); }
+        .side-ledger-dashboard.neutral .side-ledger-position-amount { color: var(--text-secondary); }
+
+        /* Create Ledger Modal */
+        .create-ledger-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .create-ledger-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .create-ledger-modal-content {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            width: 100%;
+            max-width: 360px;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .create-ledger-modal.active .create-ledger-modal-content {
+            transform: scale(1);
+        }
+
+        .create-ledger-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .create-ledger-input {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-primary);
+            width: 100%;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .create-ledger-input:focus {
+            outline: none;
+            border-color: var(--accent-amber);
+            box-shadow: 0 0 0 3px rgba(255, 181, 71, 0.2);
+        }
+
+        .create-ledger-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .create-ledger-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .create-ledger-cancel {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .create-ledger-cancel:hover {
+            border-color: var(--border-active);
+            color: var(--text-primary);
+        }
+
+        .create-ledger-submit {
+            flex: 1;
+            background: linear-gradient(135deg, var(--accent-amber), #e5a33f);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .create-ledger-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 181, 71, 0.2);
+        }
     </style>
 </head>
 <body>
     <div class="app-container">
         <!-- Header -->
         <header class="header">
-            <h1>Debt Ledger</h1>
-            <p class="subtitle">Personal Money Tracker</p>
+            <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="header-content">
+                <h1>Debt Ledger</h1>
+                <p class="subtitle">Personal Money Tracker</p>
+            </div>
         </header>
 
         <!-- Dashboard -->
@@ -1034,6 +1582,46 @@
                 <button class="clear-btn" id="clearAllBtn">Clear All</button>
             </div>
         </section>
+
+        <!-- Side Ledgers Section -->
+        <section class="side-ledgers-section">
+            <div class="side-ledgers-header">
+                <h2 class="section-title">Side Ledgers</h2>
+                <button class="create-ledger-btn" id="createLedgerBtn">+ New</button>
+            </div>
+            <div class="side-ledgers-list" id="sideLedgersList">
+                <!-- Side ledgers will be inserted here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Side Drawer -->
+    <div class="drawer-overlay" id="drawerOverlay">
+        <div class="drawer">
+            <div class="drawer-header">
+                <span class="drawer-title">Ledgers</span>
+                <button class="drawer-close" id="drawerClose">&times;</button>
+            </div>
+            <div class="drawer-content">
+                <div class="drawer-section">
+                    <div class="drawer-section-title">Main</div>
+                    <button class="drawer-item main-ledger" id="drawerMainLedger">
+                        <div class="drawer-item-icon">$</div>
+                        <div class="drawer-item-info">
+                            <div class="drawer-item-name">Main Ledger</div>
+                            <div class="drawer-item-balance neutral" id="drawerMainBalance">$0.00</div>
+                        </div>
+                    </button>
+                </div>
+                <div class="drawer-section">
+                    <div class="drawer-section-title">Side Ledgers</div>
+                    <div id="drawerSideLedgersList">
+                        <!-- Side ledgers will be inserted here -->
+                    </div>
+                    <button class="drawer-create-btn" id="drawerCreateBtn">+ Create New Ledger</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- All Transactions Page -->
@@ -1052,6 +1640,85 @@
             </div>
             <div class="all-transactions-list" id="allTransactionsList">
                 <!-- All transactions will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Side Ledger Page -->
+    <div class="side-ledger-page" id="sideLedgerPage">
+        <div class="side-ledger-page-header">
+            <button class="back-btn" id="sideLedgerBackBtn">←</button>
+            <h2 class="side-ledger-page-title" id="sideLedgerPageTitle">Side Ledger</h2>
+            <button class="side-ledger-delete-btn" id="sideLedgerDeleteBtn">Delete</button>
+        </div>
+        <div class="side-ledger-page-content">
+            <!-- Dashboard -->
+            <div class="side-ledger-dashboard neutral" id="sideLedgerDashboard">
+                <p class="position-label">Net Position</p>
+                <p class="side-ledger-position-amount" id="sideLedgerAmount">$0.00</p>
+                <p class="position-description" id="sideLedgerDesc">All settled up</p>
+            </div>
+
+            <!-- Form -->
+            <section class="form-section">
+                <h2 class="form-title">New Transaction</h2>
+                <form id="sideLedgerForm" class="form-grid">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sideLedgerAmountInput">Amount</label>
+                            <input type="number" id="sideLedgerAmountInput" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sideLedgerDate">Date</label>
+                            <input type="date" id="sideLedgerDate" required>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Category</label>
+                        <div class="category-toggle">
+                            <button type="button" class="category-btn spent active" data-value="spent-his" id="sideLedgerSpentBtn">
+                                <span class="dot"></span>
+                                Spent
+                            </button>
+                            <button type="button" class="category-btn received" data-value="received" id="sideLedgerReceivedBtn">
+                                <span class="dot"></span>
+                                Received
+                            </button>
+                        </div>
+                        <input type="hidden" id="sideLedgerCategory" value="spent-his">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="sideLedgerDescription">Description (Optional)</label>
+                        <textarea id="sideLedgerDescription" placeholder="What was this for?"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Add Transaction</button>
+                </form>
+            </section>
+
+            <!-- Transactions -->
+            <section class="history-section" style="margin-top: 20px;">
+                <div class="section-header">
+                    <h2 class="section-title">Transactions</h2>
+                    <span class="transaction-count" id="sideLedgerTxCount">0</span>
+                </div>
+                <div class="transactions-list" id="sideLedgerTransactionsList">
+                    <!-- Side ledger transactions will be inserted here -->
+                </div>
+                <div class="section-header" style="margin-top: 20px; justify-content: center;">
+                    <button class="clear-btn" id="sideLedgerClearAllBtn">Clear All</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Create Ledger Modal -->
+    <div class="create-ledger-modal" id="createLedgerModal">
+        <div class="create-ledger-modal-content">
+            <h3 class="create-ledger-modal-title">Create Side Ledger</h3>
+            <input type="text" class="create-ledger-input" id="newLedgerName" placeholder="Enter ledger name..." maxlength="30">
+            <div class="create-ledger-actions">
+                <button class="create-ledger-cancel" id="createLedgerCancel">Cancel</button>
+                <button class="create-ledger-submit" id="createLedgerSubmit">Create</button>
             </div>
         </div>
     </div>
@@ -1083,11 +1750,14 @@
         const STORAGE_KEY = 'debt_ledger_transactions';
         const DESCRIPTIONS_KEY = 'debt_ledger_descriptions';
         const AMOUNTS_KEY = 'debt_ledger_amounts';
+        const SIDE_LEDGERS_KEY = 'debt_ledger_side_ledgers';
         
         let transactions = loadTransactions();
         let selectedTransactionId = null;
         let savedDescriptions = loadDescriptions();
         let savedAmounts = loadAmounts();
+        let sideLedgers = loadSideLedgers();
+        let currentSideLedgerId = null;
 
         // =====================
         // LocalStorage Functions
@@ -1467,6 +2137,14 @@
                 ` : ''}
             `;
             
+            // Reset delete button for main ledger context
+            const deleteBtn = document.getElementById('deleteBtn');
+            deleteBtn.onclick = () => {
+                if (confirm('Delete this transaction?')) {
+                    deleteTransaction(selectedTransactionId);
+                }
+            };
+            
             document.getElementById('modalOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1813,6 +2491,533 @@
         // Initialize amount recommendations on page load
         document.addEventListener('DOMContentLoaded', () => {
             updateAmountRecommendations();
+        });
+
+        // =====================
+        // Side Ledgers Functions
+        // =====================
+        function loadSideLedgers() {
+            try {
+                const data = localStorage.getItem(SIDE_LEDGERS_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error('Error loading side ledgers:', e);
+                return [];
+            }
+        }
+
+        function saveSideLedgers() {
+            try {
+                localStorage.setItem(SIDE_LEDGERS_KEY, JSON.stringify(sideLedgers));
+            } catch (e) {
+                console.error('Error saving side ledgers:', e);
+                showToast('Error saving data');
+            }
+        }
+
+        function calculateSideLedgerBalance(ledger) {
+            return ledger.transactions.reduce((total, tx) => {
+                switch (tx.category) {
+                    case 'received':
+                        return total + tx.amount;
+                    case 'spent-his':
+                        return total - tx.amount;
+                    default:
+                        return total;
+                }
+            }, 0);
+        }
+
+        function renderSideLedgersList() {
+            const list = document.getElementById('sideLedgersList');
+            
+            if (sideLedgers.length === 0) {
+                list.innerHTML = `
+                    <div class="side-ledgers-empty">
+                        <div class="side-ledgers-empty-icon">📒</div>
+                        <p>No side ledgers yet.<br>Create one to track separate accounts.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = sideLedgers.map(ledger => {
+                const balance = calculateSideLedgerBalance(ledger);
+                const balanceClass = balance > 0 ? 'positive' : (balance < 0 ? 'negative' : 'neutral');
+                const sign = balance >= 0 ? '' : '-';
+                const txCount = ledger.transactions.length;
+                
+                return `
+                    <div class="side-ledger-card" data-id="${ledger.id}">
+                        <div class="side-ledger-card-header">
+                            <div>
+                                <p class="side-ledger-name">${escapeHtml(ledger.name)}</p>
+                                <p class="side-ledger-meta">${txCount} transaction${txCount !== 1 ? 's' : ''}</p>
+                            </div>
+                            <span class="side-ledger-balance ${balanceClass}">${sign}$${Math.abs(balance).toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Add click listeners
+            list.querySelectorAll('.side-ledger-card').forEach(el => {
+                el.addEventListener('click', () => openSideLedgerPage(el.dataset.id));
+            });
+            
+            // Also update drawer
+            renderDrawerSideLedgers();
+        }
+
+        function renderDrawerSideLedgers() {
+            const list = document.getElementById('drawerSideLedgersList');
+            
+            // Update main ledger balance in drawer
+            const mainBalance = calculateNetPosition();
+            const mainBalanceEl = document.getElementById('drawerMainBalance');
+            const mainBalanceClass = mainBalance > 0 ? 'positive' : (mainBalance < 0 ? 'negative' : 'neutral');
+            const mainSign = mainBalance >= 0 ? '' : '-';
+            mainBalanceEl.textContent = `${mainSign}$${Math.abs(mainBalance).toFixed(2)}`;
+            mainBalanceEl.className = `drawer-item-balance ${mainBalanceClass}`;
+            
+            if (sideLedgers.length === 0) {
+                list.innerHTML = `<p style="padding: 12px; color: var(--text-muted); font-size: 13px; text-align: center;">No side ledgers yet</p>`;
+                return;
+            }
+            
+            list.innerHTML = sideLedgers.map(ledger => {
+                const balance = calculateSideLedgerBalance(ledger);
+                const balanceClass = balance > 0 ? 'positive' : (balance < 0 ? 'negative' : 'neutral');
+                const sign = balance >= 0 ? '' : '-';
+                
+                return `
+                    <button class="drawer-item" data-id="${ledger.id}">
+                        <div class="drawer-item-icon">📒</div>
+                        <div class="drawer-item-info">
+                            <div class="drawer-item-name">${escapeHtml(ledger.name)}</div>
+                            <div class="drawer-item-balance ${balanceClass}">${sign}$${Math.abs(balance).toFixed(2)}</div>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+            
+            // Add click listeners
+            list.querySelectorAll('.drawer-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    closeDrawer();
+                    openSideLedgerPage(el.dataset.id);
+                });
+            });
+        }
+
+        function openDrawer() {
+            document.getElementById('drawerOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderDrawerSideLedgers();
+        }
+
+        function closeDrawer() {
+            document.getElementById('drawerOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function createSideLedger(name) {
+            const ledger = {
+                id: generateId(),
+                name: name.trim(),
+                transactions: [],
+                createdAt: Date.now()
+            };
+            
+            sideLedgers.push(ledger);
+            saveSideLedgers();
+            renderSideLedgersList();
+            showToast('Side ledger created');
+            return ledger;
+        }
+
+        function deleteSideLedger(id) {
+            sideLedgers = sideLedgers.filter(l => l.id !== id);
+            saveSideLedgers();
+            renderSideLedgersList();
+            closeSideLedgerPage();
+            showToast('Side ledger deleted');
+        }
+
+        function openSideLedgerPage(id) {
+            currentSideLedgerId = id;
+            const ledger = sideLedgers.find(l => l.id === id);
+            if (!ledger) return;
+            
+            document.getElementById('sideLedgerPageTitle').textContent = ledger.name;
+            document.getElementById('sideLedgerPage').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Reset form
+            document.getElementById('sideLedgerAmountInput').value = '';
+            document.getElementById('sideLedgerDescription').value = '';
+            document.getElementById('sideLedgerDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('sideLedgerCategory').value = 'spent-his';
+            document.getElementById('sideLedgerSpentBtn').classList.add('active');
+            document.getElementById('sideLedgerReceivedBtn').classList.remove('active');
+            
+            updateSideLedgerDashboard();
+            renderSideLedgerTransactions();
+        }
+
+        function closeSideLedgerPage() {
+            document.getElementById('sideLedgerPage').classList.remove('active');
+            document.body.style.overflow = '';
+            currentSideLedgerId = null;
+        }
+
+        function updateSideLedgerDashboard() {
+            const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
+            if (!ledger) return;
+            
+            const dashboard = document.getElementById('sideLedgerDashboard');
+            const amountEl = document.getElementById('sideLedgerAmount');
+            const descEl = document.getElementById('sideLedgerDesc');
+            
+            const balance = calculateSideLedgerBalance(ledger);
+            
+            dashboard.classList.remove('positive', 'negative', 'neutral');
+            if (balance > 0) {
+                dashboard.classList.add('positive');
+            } else if (balance < 0) {
+                dashboard.classList.add('negative');
+            } else {
+                dashboard.classList.add('neutral');
+            }
+            
+            const sign = balance >= 0 ? '' : '-';
+            amountEl.textContent = `${sign}$${Math.abs(balance).toFixed(2)}`;
+            descEl.innerHTML = getPositionDescription(balance);
+        }
+
+        function renderSideLedgerTransactions() {
+            const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
+            if (!ledger) return;
+            
+            const list = document.getElementById('sideLedgerTransactionsList');
+            const countEl = document.getElementById('sideLedgerTxCount');
+            
+            countEl.textContent = ledger.transactions.length;
+            
+            if (ledger.transactions.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <p>No transactions yet.<br>Add one above to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const sorted = [...ledger.transactions]
+                .sort((a, b) => {
+                    const dateCompare = new Date(b.date) - new Date(a.date);
+                    if (dateCompare !== 0) return dateCompare;
+                    return b.timestamp - a.timestamp;
+                });
+            
+            list.innerHTML = sorted.map(tx => {
+                const typeClass = `type-${tx.category}`;
+                const typeLabel = getCategoryLabel(tx.category);
+                const sign = tx.category === 'received' ? '+' : '-';
+                const formattedDate = formatDate(tx.date);
+                
+                return `
+                    <div class="receipt ${typeClass}" data-id="${tx.id}">
+                        <div class="receipt-header">
+                            <span class="receipt-type">${typeLabel}</span>
+                            <span class="receipt-amount">${sign}$${tx.amount.toFixed(2)}</span>
+                        </div>
+                        <p class="receipt-date">${formattedDate}</p>
+                        ${tx.description ? `<p class="receipt-desc">${escapeHtml(tx.description)}</p>` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            // Add click listeners for side ledger transactions
+            list.querySelectorAll('.receipt').forEach(el => {
+                el.addEventListener('click', () => openSideLedgerModal(el.dataset.id));
+            });
+        }
+
+        function addSideLedgerTransaction(data) {
+            const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
+            if (!ledger) return;
+            
+            const tx = {
+                id: generateId(),
+                amount: parseFloat(data.amount),
+                category: data.category,
+                description: data.description.trim(),
+                date: data.date,
+                timestamp: Date.now()
+            };
+            
+            ledger.transactions.push(tx);
+            saveSideLedgers();
+            updateSideLedgerDashboard();
+            renderSideLedgerTransactions();
+            renderSideLedgersList(); // Update the card balance
+            showToast('Transaction added');
+        }
+
+        function deleteSideLedgerTransaction(txId) {
+            const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
+            if (!ledger) return;
+            
+            ledger.transactions = ledger.transactions.filter(tx => tx.id !== txId);
+            saveSideLedgers();
+            updateSideLedgerDashboard();
+            renderSideLedgerTransactions();
+            renderSideLedgersList();
+            closeModal();
+            showToast('Transaction deleted');
+        }
+
+        function clearAllSideLedgerTransactions() {
+            const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
+            if (!ledger || ledger.transactions.length === 0) return;
+            
+            if (confirm('Are you sure you want to delete all transactions in this ledger? This cannot be undone.')) {
+                ledger.transactions = [];
+                saveSideLedgers();
+                updateSideLedgerDashboard();
+                renderSideLedgerTransactions();
+                renderSideLedgersList();
+                showToast('All transactions cleared');
+            }
+        }
+
+        // Calculate running balance for side ledger transactions
+        function calculateSideLedgerRunningBalance(transactionId) {
+            const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
+            if (!ledger) return 0;
+            
+            const sorted = [...ledger.transactions].sort((a, b) => {
+                const dateCompare = new Date(a.date) - new Date(b.date);
+                if (dateCompare !== 0) return dateCompare;
+                return a.timestamp - b.timestamp;
+            });
+            
+            let runningBalance = 0;
+            for (const tx of sorted) {
+                if (tx.id === transactionId) {
+                    break;
+                }
+                
+                if (tx.category === 'received') {
+                    runningBalance += tx.amount;
+                } else if (tx.category === 'spent-his') {
+                    runningBalance -= tx.amount;
+                }
+            }
+            
+            return runningBalance;
+        }
+
+        function openSideLedgerModal(txId) {
+            const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
+            if (!ledger) return;
+            
+            const tx = ledger.transactions.find(t => t.id === txId);
+            if (!tx) return;
+            
+            selectedTransactionId = txId;
+            
+            const detailsEl = document.getElementById('modalDetails');
+            const sign = tx.category === 'received' ? '+' : '-';
+            const colorClass = tx.category === 'received' ? 'green' : 'red';
+            
+            const runningBalance = calculateSideLedgerRunningBalance(txId);
+            const balanceSign = runningBalance >= 0 ? '' : '-';
+            const balanceColorClass = runningBalance > 0 ? 'green' : (runningBalance < 0 ? 'red' : '');
+            
+            detailsEl.innerHTML = `
+                <div class="detail-row">
+                    <span class="detail-label">Amount</span>
+                    <span class="detail-value amount ${colorClass}">${sign}$${tx.amount.toFixed(2)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Type</span>
+                    <span class="detail-value">${getCategoryLabel(tx.category)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">${formatDate(tx.date)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Added On</span>
+                    <span class="detail-value">${formatTimestamp(tx.timestamp)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Balance Before</span>
+                    <span class="detail-value amount ${balanceColorClass}">${balanceSign}$${Math.abs(runningBalance).toFixed(2)}</span>
+                </div>
+                ${tx.description ? `
+                <div class="detail-row">
+                    <span class="detail-label">Description</span>
+                    <span class="detail-value description">${escapeHtml(tx.description)}</span>
+                </div>
+                ` : ''}
+            `;
+            
+            // Update delete button for side ledger context
+            const deleteBtn = document.getElementById('deleteBtn');
+            deleteBtn.onclick = () => {
+                if (confirm('Delete this transaction?')) {
+                    deleteSideLedgerTransaction(txId);
+                }
+            };
+            
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        // =====================
+        // Drawer Event Listeners
+        // =====================
+        
+        // Open drawer
+        document.getElementById('menuBtn').addEventListener('click', openDrawer);
+        
+        // Close drawer
+        document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+        document.getElementById('drawerOverlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeDrawer();
+        });
+        
+        // Main ledger button in drawer
+        document.getElementById('drawerMainLedger').addEventListener('click', () => {
+            closeDrawer();
+            // If on side ledger page, close it
+            if (document.getElementById('sideLedgerPage').classList.contains('active')) {
+                closeSideLedgerPage();
+            }
+            // If on all transactions page, close it
+            if (document.getElementById('allTransactionsPage').classList.contains('active')) {
+                closeAllTransactionsPage();
+            }
+        });
+        
+        // Create button in drawer
+        document.getElementById('drawerCreateBtn').addEventListener('click', () => {
+            closeDrawer();
+            document.getElementById('createLedgerModal').classList.add('active');
+            document.getElementById('newLedgerName').value = '';
+            document.getElementById('newLedgerName').focus();
+        });
+
+        // =====================
+        // Side Ledger Event Listeners
+        // =====================
+        
+        // Create ledger modal
+        document.getElementById('createLedgerBtn').addEventListener('click', () => {
+            document.getElementById('createLedgerModal').classList.add('active');
+            document.getElementById('newLedgerName').value = '';
+            document.getElementById('newLedgerName').focus();
+        });
+
+        document.getElementById('createLedgerCancel').addEventListener('click', () => {
+            document.getElementById('createLedgerModal').classList.remove('active');
+        });
+
+        document.getElementById('createLedgerModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('createLedgerModal').classList.remove('active');
+            }
+        });
+
+        document.getElementById('createLedgerSubmit').addEventListener('click', () => {
+            const name = document.getElementById('newLedgerName').value.trim();
+            if (!name) {
+                showToast('Please enter a ledger name');
+                return;
+            }
+            createSideLedger(name);
+            document.getElementById('createLedgerModal').classList.remove('active');
+        });
+
+        // Allow Enter key to submit
+        document.getElementById('newLedgerName').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('createLedgerSubmit').click();
+            }
+        });
+
+        // Side ledger page
+        document.getElementById('sideLedgerBackBtn').addEventListener('click', closeSideLedgerPage);
+
+        document.getElementById('sideLedgerDeleteBtn').addEventListener('click', () => {
+            if (confirm('Delete this side ledger and all its transactions? This cannot be undone.')) {
+                deleteSideLedger(currentSideLedgerId);
+            }
+        });
+
+        // Side ledger form
+        document.getElementById('sideLedgerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                amount: document.getElementById('sideLedgerAmountInput').value,
+                category: document.getElementById('sideLedgerCategory').value,
+                description: document.getElementById('sideLedgerDescription').value,
+                date: document.getElementById('sideLedgerDate').value
+            };
+            
+            if (!formData.amount || parseFloat(formData.amount) <= 0) {
+                showToast('Please enter a valid amount');
+                return;
+            }
+            
+            addSideLedgerTransaction(formData);
+            
+            // Reset form
+            document.getElementById('sideLedgerAmountInput').value = '';
+            document.getElementById('sideLedgerDescription').value = '';
+            document.getElementById('sideLedgerDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('sideLedgerCategory').value = 'spent-his';
+            document.getElementById('sideLedgerSpentBtn').classList.add('active');
+            document.getElementById('sideLedgerReceivedBtn').classList.remove('active');
+        });
+
+        // Side ledger category buttons
+        document.getElementById('sideLedgerSpentBtn').addEventListener('click', () => {
+            document.getElementById('sideLedgerSpentBtn').classList.add('active');
+            document.getElementById('sideLedgerReceivedBtn').classList.remove('active');
+            document.getElementById('sideLedgerCategory').value = 'spent-his';
+        });
+
+        document.getElementById('sideLedgerReceivedBtn').addEventListener('click', () => {
+            document.getElementById('sideLedgerReceivedBtn').classList.add('active');
+            document.getElementById('sideLedgerSpentBtn').classList.remove('active');
+            document.getElementById('sideLedgerCategory').value = 'received';
+        });
+
+        // Side ledger clear all
+        document.getElementById('sideLedgerClearAllBtn').addEventListener('click', clearAllSideLedgerTransactions);
+
+        // Escape key to close overlays
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('drawerOverlay').classList.contains('active')) {
+                    closeDrawer();
+                } else if (document.getElementById('createLedgerModal').classList.contains('active')) {
+                    document.getElementById('createLedgerModal').classList.remove('active');
+                } else if (document.getElementById('sideLedgerPage').classList.contains('active')) {
+                    closeSideLedgerPage();
+                }
+            }
+        });
+
+        // Initialize side ledgers on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSideLedgersList();
         });
 
         // =====================
