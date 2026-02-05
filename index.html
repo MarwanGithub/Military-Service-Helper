@@ -1397,6 +1397,33 @@
         // =====================
         // Modal Functions
         // =====================
+        
+        // Calculate running balance BEFORE a specific transaction
+        function calculateRunningBalance(transactionId) {
+            // Sort transactions chronologically (oldest first by date, then timestamp)
+            const sorted = [...transactions].sort((a, b) => {
+                const dateCompare = new Date(a.date) - new Date(b.date);
+                if (dateCompare !== 0) return dateCompare;
+                return a.timestamp - b.timestamp;
+            });
+            
+            let runningBalance = 0;
+            for (const tx of sorted) {
+                // Stop BEFORE adding the target transaction
+                if (tx.id === transactionId) {
+                    break;
+                }
+                
+                if (tx.category === 'received') {
+                    runningBalance += tx.amount;
+                } else if (tx.category === 'spent-his') {
+                    runningBalance -= tx.amount;
+                }
+            }
+            
+            return runningBalance;
+        }
+        
         function openModal(id) {
             selectedTransactionId = id;
             const tx = transactions.find(t => t.id === id);
@@ -1405,6 +1432,11 @@
             const detailsEl = document.getElementById('modalDetails');
             const sign = tx.category === 'received' ? '+' : '-';
             const colorClass = tx.category === 'received' ? 'green' : 'red';
+            
+            // Calculate running balance at this transaction
+            const runningBalance = calculateRunningBalance(id);
+            const balanceSign = runningBalance >= 0 ? '' : '-';
+            const balanceColorClass = runningBalance > 0 ? 'green' : (runningBalance < 0 ? 'red' : '');
             
             detailsEl.innerHTML = `
                 <div class="detail-row">
@@ -1422,6 +1454,10 @@
                 <div class="detail-row">
                     <span class="detail-label">Added On</span>
                     <span class="detail-value">${formatTimestamp(tx.timestamp)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Balance Before</span>
+                    <span class="detail-value amount ${balanceColorClass}">${balanceSign}$${Math.abs(runningBalance).toFixed(2)}</span>
                 </div>
                 ${tx.description ? `
                 <div class="detail-row">
