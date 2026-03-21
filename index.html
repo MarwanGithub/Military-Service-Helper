@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -7,7 +8,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0a0a0f">
     <meta name="description" content="Track money exchanges and debts">
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkRlYnQgTGVkZ2VyIiwKICAic2hvcnRfbmFtZSI6ICJMZWRnZXIiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBhMGEwZiIsCiAgInRoZW1lX2NvbG9yIjogIiMwYTBhMGYiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmclMjB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnJTIwd2lkdGg9JzE5MiclMjBoZWlnaHQ9JzE5MiclMjB2aWV3Qm94PScwJTIwMCUyMDE5MiUyMDE5MiclM0UlM0NyZWN0JTIwd2lkdGg9JzE5MiclMjBoZWlnaHQ9JzE5MiclMjBmaWxsPSclMjMwYTBhMGYnLyUzRSUzQ3RleHQlMjB4PScxMDAlMjB5PScxMDAnJTIwZm9udC1mYW1pbHk9J0FyaWFsJyUyMGZvbnQtc2l6ZT0nODAnJTIwdGV4dC1hbmNob3I9J21pZGRsZSclMjBmaWxsPSclMjMwMGQ2OGYnJTIwZG9taW5hbnQtYmFzZWxpbmU9J21pZGRsZSclM0UkJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnJTIweG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyUyMHdpZHRoPSc1MTInJTIwaGVpZ2h0PSc1MTInJTIwdmlld0JveD0nMCUyMDAlMjA1MTIlMjA1MTInJTNFJTNDcmVjdCUyMHdpZHRoPSc1MTInJTIwaGVpZ2h0PSc1MTInJTIwZmlsbD0nJTIzMGEwYTBmJy8lM0UlM0N0ZXh0JTIweD0nMjU2JyUyMHk9JzI3MCclMjBmb250LWZhbWlseT0nQXJpYWwnJTIwZm9udC1zaXplPScyNDAnJTIwdGV4dC1hbmNob3I9J21pZGRsZSclMjBmaWxsPSclMjMwMGQ2OGYnJTIwZG9taW5hbnQtYmFzZWxpbmU9J21pZGRsZSclM0UkJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    <link rel="manifest"
+        href="data:application/json;base64,ewogICJuYW1lIjogIkRlYnQgTGVkZ2VyIiwKICAic2hvcnRfbmFtZSI6ICJMZWRnZXIiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBhMGEwZiIsCiAgInRoZW1lX2NvbG9yIjogIiMwYTBhMGYiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmclMjB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnJTIwd2lkdGg9JzE5MiclMjBoZWlnaHQ9JzE5MiclMjB2aWV3Qm94PScwJTIwMCUyMDE5MiUyMDE5MiclM0UlM0NyZWN0JTIwd2lkdGg9JzE5MiclMjBoZWlnaHQ9JzE5MiclMjBmaWxsPSclMjMwYTBhMGYnLyUzRSUzQ3RleHQlMjB4PScxMDAlMjB5PScxMDAnJTIwZm9udC1mYW1pbHk9J0FyaWFsJyUyMGZvbnQtc2l6ZT0nODAnJTIwdGV4dC1hbmNob3I9J21pZGRsZSclMjBmaWxsPSclMjMwMGQ2OGYnJTIwZG9taW5hbnQtYmFzZWxpbmU9J21pZGRsZSclM0UkJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnJTIweG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyUyMHdpZHRoPSc1MTInJTIwaGVpZ2h0PSc1MTInJTIwdmlld0JveD0nMCUyMDAlMjA1MTIlMjA1MTInJTNFJTNDcmVjdCUyMHdpZHRoPSc1MTInJTIwaGVpZ2h0PSc1MTInJTIwZmlsbD0nJTIzMGEwYTBmJy8lM0UlM0N0ZXh0JTIweD0nMjU2JyUyMHk9JzI3MCclMjBmb250LWZhbWlseT0nQXJpYWwnJTIwZm9udC1zaXplPScyNDAnJTIwdGV4dC1hbmNob3I9J21pZGRsZSclMjBmaWxsPSclMjMwMGQ2OGYnJTIwZG9taW5hbnQtYmFzZWxpbmU9J21pZGRsZSclM0UkJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
     <title>Debt Ledger</title>
     <style>
         :root {
@@ -39,7 +41,8 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
+        html,
+        body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
@@ -59,7 +62,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
+            background:
                 radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 214, 143, 0.08), transparent),
                 radial-gradient(ellipse 60% 40% at 100% 0%, rgba(255, 181, 71, 0.05), transparent);
             pointer-events: none;
@@ -86,8 +89,15 @@
         }
 
         @keyframes fadeDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header-content {
@@ -142,6 +152,47 @@
 
         .menu-btn:hover span {
             background: var(--accent-amber);
+        }
+
+        /* Train Ticket Button */
+        .train-btn {
+            position: absolute;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            height: 40px;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .train-btn:hover {
+            border-color: var(--accent-amber);
+            background: rgba(255, 181, 71, 0.1);
+            color: var(--accent-amber);
+            box-shadow: 0 0 16px rgba(255, 181, 71, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .train-btn:active {
+            transform: translateY(0);
+        }
+
+        .train-btn-icon {
+            font-size: 15px;
+            line-height: 1;
         }
 
         /* Side Drawer */
@@ -289,9 +340,17 @@
             margin-top: 2px;
         }
 
-        .drawer-item-balance.positive { color: var(--accent-green); }
-        .drawer-item-balance.negative { color: var(--accent-red); }
-        .drawer-item-balance.neutral { color: var(--text-muted); }
+        .drawer-item-balance.positive {
+            color: var(--accent-green);
+        }
+
+        .drawer-item-balance.negative {
+            color: var(--accent-red);
+        }
+
+        .drawer-item-balance.neutral {
+            color: var(--text-muted);
+        }
 
         .drawer-item.main-ledger .drawer-item-name {
             color: var(--accent-green);
@@ -336,8 +395,15 @@
         }
 
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .dashboard::before {
@@ -1095,8 +1161,13 @@
             font-size: 18px;
         }
 
-        .detail-value.green { color: var(--accent-green); }
-        .detail-value.red { color: var(--accent-red); }
+        .detail-value.green {
+            color: var(--accent-green);
+        }
+
+        .detail-value.red {
+            color: var(--accent-red);
+        }
 
         .detail-value.description {
             max-width: 60%;
@@ -1279,6 +1350,7 @@
                 opacity: 0;
                 transform: translateX(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -1294,7 +1366,7 @@
             .position-amount {
                 font-size: 40px;
             }
-            
+
             .form-row {
                 grid-template-columns: 1fr;
             }
@@ -1410,9 +1482,17 @@
             font-weight: 500;
         }
 
-        .side-ledger-balance.positive { color: var(--accent-green); }
-        .side-ledger-balance.negative { color: var(--accent-red); }
-        .side-ledger-balance.neutral { color: var(--text-secondary); }
+        .side-ledger-balance.positive {
+            color: var(--accent-green);
+        }
+
+        .side-ledger-balance.negative {
+            color: var(--accent-red);
+        }
+
+        .side-ledger-balance.neutral {
+            color: var(--text-secondary);
+        }
 
         .side-ledger-meta {
             font-size: 12px;
@@ -1531,9 +1611,17 @@
             margin-bottom: 8px;
         }
 
-        .side-ledger-dashboard.positive .side-ledger-position-amount { color: var(--accent-green); }
-        .side-ledger-dashboard.negative .side-ledger-position-amount { color: var(--accent-red); }
-        .side-ledger-dashboard.neutral .side-ledger-position-amount { color: var(--text-secondary); }
+        .side-ledger-dashboard.positive .side-ledger-position-amount {
+            color: var(--accent-green);
+        }
+
+        .side-ledger-dashboard.negative .side-ledger-position-amount {
+            color: var(--accent-red);
+        }
+
+        .side-ledger-dashboard.neutral .side-ledger-position-amount {
+            color: var(--text-secondary);
+        }
 
         /* Create Ledger Modal */
         .create-ledger-modal {
@@ -1644,6 +1732,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="app-container">
         <!-- Header -->
@@ -1657,6 +1746,11 @@
                 <h1>Debt Ledger</h1>
                 <p class="subtitle">Personal Money Tracker</p>
             </div>
+            <a class="train-btn" href="https://train-searcher.netlify.app/" target="_blank" rel="noopener noreferrer"
+                aria-label="Book train tickets">
+                <span class="train-btn-icon">🚆</span>
+                Train
+            </a>
         </header>
 
         <!-- Dashboard -->
@@ -1806,7 +1900,8 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="sideLedgerAmountInput">Amount</label>
-                            <input type="number" id="sideLedgerAmountInput" placeholder="0.00" step="0.01" min="0" required>
+                            <input type="number" id="sideLedgerAmountInput" placeholder="0.00" step="0.01" min="0"
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="sideLedgerDate">Date</label>
@@ -1816,11 +1911,13 @@
                     <div class="form-group full-width">
                         <label>Category</label>
                         <div class="category-toggle">
-                            <button type="button" class="category-btn spent active" data-value="spent-his" id="sideLedgerSpentBtn">
+                            <button type="button" class="category-btn spent active" data-value="spent-his"
+                                id="sideLedgerSpentBtn">
                                 <span class="dot"></span>
                                 Spent
                             </button>
-                            <button type="button" class="category-btn received" data-value="received" id="sideLedgerReceivedBtn">
+                            <button type="button" class="category-btn received" data-value="received"
+                                id="sideLedgerReceivedBtn">
                                 <span class="dot"></span>
                                 Received
                             </button>
@@ -1855,7 +1952,8 @@
     <div class="create-ledger-modal" id="createLedgerModal">
         <div class="create-ledger-modal-content">
             <h3 class="create-ledger-modal-title">Create Side Ledger</h3>
-            <input type="text" class="create-ledger-input" id="newLedgerName" placeholder="Enter ledger name..." maxlength="30">
+            <input type="text" class="create-ledger-input" id="newLedgerName" placeholder="Enter ledger name..."
+                maxlength="30">
             <div class="create-ledger-actions">
                 <button class="create-ledger-cancel" id="createLedgerCancel">Cancel</button>
                 <button class="create-ledger-submit" id="createLedgerSubmit">Create</button>
@@ -1895,7 +1993,7 @@
         const PINNED_DESCRIPTIONS_KEY = 'debt_ledger_pinned_descriptions';
         const AMOUNTS_KEY = 'debt_ledger_amounts';
         const SIDE_LEDGERS_KEY = 'debt_ledger_side_ledgers';
-        
+
         let transactions = loadTransactions();
         let selectedTransactionId = null;
         let savedDescriptions = loadDescriptions();
@@ -1947,18 +2045,18 @@
         function addDescription(description) {
             const trimmed = description.trim();
             if (!trimmed || trimmed.length < 2) return;
-            
+
             // Remove if already exists (to avoid duplicates)
             savedDescriptions = savedDescriptions.filter(d => d.toLowerCase() !== trimmed.toLowerCase());
-            
+
             // Add to beginning (most recent first)
             savedDescriptions.unshift(trimmed);
-            
+
             // Keep only last 10 descriptions
             if (savedDescriptions.length > 10) {
                 savedDescriptions = savedDescriptions.slice(0, 10);
             }
-            
+
             saveDescriptions();
         }
 
@@ -2000,7 +2098,7 @@
         function getMatchingDescriptions(input) {
             const trimmed = input.trim().toLowerCase();
             if (!trimmed) return savedDescriptions.slice(0, 5);
-            
+
             return savedDescriptions
                 .filter(desc => desc.toLowerCase().includes(trimmed))
                 .slice(0, 5);
@@ -2027,18 +2125,18 @@
         function addAmount(amount) {
             const numAmount = parseFloat(amount);
             if (!numAmount || numAmount <= 0) return;
-            
+
             // Remove if already exists (to avoid duplicates)
             savedAmounts = savedAmounts.filter(a => a !== numAmount);
-            
+
             // Add to beginning (most recent first)
             savedAmounts.unshift(numAmount);
-            
+
             // Keep only last 8 amounts
             if (savedAmounts.length > 8) {
                 savedAmounts = savedAmounts.slice(0, 8);
             }
-            
+
             saveAmounts();
         }
 
@@ -2074,9 +2172,9 @@
             const dashboard = document.getElementById('dashboard');
             const amountEl = document.getElementById('positionAmount');
             const descEl = document.getElementById('positionDesc');
-            
+
             const netPosition = calculateNetPosition();
-            
+
             // Update classes
             dashboard.classList.remove('positive', 'negative', 'neutral');
             if (netPosition > 0) {
@@ -2086,7 +2184,7 @@
             } else {
                 dashboard.classList.add('neutral');
             }
-            
+
             // Update display
             const sign = netPosition >= 0 ? '' : '-';
             amountEl.textContent = `${sign}$${Math.abs(netPosition).toFixed(2)}`;
@@ -2096,7 +2194,7 @@
         function renderTransactions() {
             const list = document.getElementById('transactionsList');
             const viewAllBtn = document.getElementById('viewAllBtn');
-            
+
             if (transactions.length === 0) {
                 list.innerHTML = `
                     <div class="empty-state">
@@ -2107,7 +2205,7 @@
                 viewAllBtn.style.display = 'none';
                 return;
             }
-            
+
             // Update View All button text
             if (transactions.length > 5) {
                 viewAllBtn.textContent = `View All (${transactions.length})`;
@@ -2116,7 +2214,7 @@
                 viewAllBtn.textContent = 'View All';
                 viewAllBtn.style.display = transactions.length > 0 ? 'block' : 'none';
             }
-            
+
             // Sort by date descending, then by timestamp descending
             const sorted = [...transactions]
                 .sort((a, b) => {
@@ -2125,13 +2223,13 @@
                     return b.timestamp - a.timestamp;
                 })
                 .slice(0, 5);
-            
+
             list.innerHTML = sorted.map(tx => {
                 const typeClass = `type-${tx.category}`;
                 const typeLabel = getCategoryLabel(tx.category);
                 const sign = tx.category === 'received' ? '+' : '-';
                 const formattedDate = formatDate(tx.date);
-                
+
                 return `
                     <div class="receipt ${typeClass}" data-id="${tx.id}">
                         <div class="receipt-header">
@@ -2143,7 +2241,7 @@
                     </div>
                 `;
             }).join('');
-            
+
             // Add click listeners
             list.querySelectorAll('.receipt').forEach(el => {
                 el.addEventListener('click', () => openModal(el.dataset.id));
@@ -2153,9 +2251,9 @@
         function renderAllTransactions() {
             const list = document.getElementById('allTransactionsList');
             const countEl = document.getElementById('transactionCount');
-            
+
             countEl.textContent = transactions.length;
-            
+
             if (transactions.length === 0) {
                 list.innerHTML = `
                     <div class="empty-state">
@@ -2165,7 +2263,7 @@
                 `;
                 return;
             }
-            
+
             // Sort by date descending, then by timestamp descending (NO LIMIT)
             const sorted = [...transactions]
                 .sort((a, b) => {
@@ -2173,13 +2271,13 @@
                     if (dateCompare !== 0) return dateCompare;
                     return b.timestamp - a.timestamp;
                 });
-            
+
             list.innerHTML = sorted.map(tx => {
                 const typeClass = `type-${tx.category}`;
                 const typeLabel = getCategoryLabel(tx.category);
                 const sign = tx.category === 'received' ? '+' : '-';
                 const formattedDate = formatDate(tx.date);
-                
+
                 return `
                     <div class="receipt ${typeClass}" data-id="${tx.id}">
                         <div class="receipt-header">
@@ -2191,7 +2289,7 @@
                     </div>
                 `;
             }).join('');
-            
+
             // Add click listeners
             list.querySelectorAll('.receipt').forEach(el => {
                 el.addEventListener('click', () => openModal(el.dataset.id));
@@ -2219,8 +2317,8 @@
 
         function formatDate(dateStr) {
             const date = new Date(dateStr + 'T00:00:00');
-            return date.toLocaleDateString('en-US', { 
-                month: 'short', 
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
                 day: 'numeric',
                 year: 'numeric'
             });
@@ -2247,7 +2345,7 @@
         // =====================
         // Modal Functions
         // =====================
-        
+
         // Calculate running balance BEFORE a specific transaction
         function calculateRunningBalance(transactionId) {
             // Sort transactions chronologically (oldest first by date, then timestamp)
@@ -2256,38 +2354,38 @@
                 if (dateCompare !== 0) return dateCompare;
                 return a.timestamp - b.timestamp;
             });
-            
+
             let runningBalance = 0;
             for (const tx of sorted) {
                 // Stop BEFORE adding the target transaction
                 if (tx.id === transactionId) {
                     break;
                 }
-                
+
                 if (tx.category === 'received') {
                     runningBalance += tx.amount;
                 } else if (tx.category === 'spent-his') {
                     runningBalance -= tx.amount;
                 }
             }
-            
+
             return runningBalance;
         }
-        
+
         function openModal(id) {
             selectedTransactionId = id;
             const tx = transactions.find(t => t.id === id);
             if (!tx) return;
-            
+
             const detailsEl = document.getElementById('modalDetails');
             const sign = tx.category === 'received' ? '+' : '-';
             const colorClass = tx.category === 'received' ? 'green' : 'red';
-            
+
             // Calculate running balance at this transaction
             const runningBalance = calculateRunningBalance(id);
             const balanceSign = runningBalance >= 0 ? '' : '-';
             const balanceColorClass = runningBalance > 0 ? 'green' : (runningBalance < 0 ? 'red' : '');
-            
+
             detailsEl.innerHTML = `
                 <div class="detail-row">
                     <span class="detail-label">Amount</span>
@@ -2316,14 +2414,14 @@
                 </div>
                 ` : ''}
             `;
-            
+
             // Show actions and reset title
             document.getElementById('modalActions').style.display = 'flex';
             document.querySelector('.modal-title').textContent = 'Transaction Details';
-            
+
             // Set context for main ledger
             editingContext = 'main';
-            
+
             // Reset delete button for main ledger context
             const deleteBtn = document.getElementById('deleteBtn');
             deleteBtn.onclick = () => {
@@ -2331,13 +2429,13 @@
                     deleteTransaction(selectedTransactionId);
                 }
             };
-            
+
             // Edit button for main ledger context
             const editBtn = document.getElementById('editBtn');
             editBtn.onclick = () => {
                 showEditForm(tx);
             };
-            
+
             document.getElementById('modalOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -2358,15 +2456,15 @@
         function showEditForm(tx) {
             const detailsEl = document.getElementById('modalDetails');
             const actionsEl = document.getElementById('modalActions');
-            
+
             // Hide actions buttons
             actionsEl.style.display = 'none';
-            
+
             // Update modal title
             document.querySelector('.modal-title').textContent = 'Edit Transaction';
-            
+
             const isReceived = tx.category === 'received';
-            
+
             detailsEl.innerHTML = `
                 <div class="modal-edit-form">
                     <div class="form-row">
@@ -2403,20 +2501,20 @@
                     </div>
                 </div>
             `;
-            
+
             // Category toggle listeners
             document.getElementById('editSpentBtn').addEventListener('click', () => {
                 document.getElementById('editSpentBtn').classList.add('active');
                 document.getElementById('editReceivedBtn').classList.remove('active');
                 document.getElementById('editCategory').value = 'spent-his';
             });
-            
+
             document.getElementById('editReceivedBtn').addEventListener('click', () => {
                 document.getElementById('editReceivedBtn').classList.add('active');
                 document.getElementById('editSpentBtn').classList.remove('active');
                 document.getElementById('editCategory').value = 'received';
             });
-            
+
             // Cancel button
             document.getElementById('editCancelBtn').addEventListener('click', () => {
                 // Re-open the detail view
@@ -2426,14 +2524,14 @@
                     openModal(selectedTransactionId);
                 }
             });
-            
+
             // Save button
             document.getElementById('editSaveBtn').addEventListener('click', () => {
                 const newAmount = parseFloat(document.getElementById('editAmount').value);
                 const newDate = document.getElementById('editDate').value;
                 const newCategory = document.getElementById('editCategory').value;
                 const newDescription = document.getElementById('editDescription').value.trim();
-                
+
                 if (!newAmount || newAmount <= 0) {
                     showToast('Please enter a valid amount');
                     return;
@@ -2442,14 +2540,14 @@
                     showToast('Please enter a valid date');
                     return;
                 }
-                
+
                 if (editingContext === 'side') {
                     saveSideLedgerEdit(selectedTransactionId, newAmount, newDate, newCategory, newDescription);
                 } else {
                     saveMainEdit(selectedTransactionId, newAmount, newDate, newCategory, newDescription);
                 }
             });
-            
+
             // Focus amount field
             document.getElementById('editAmount').focus();
         }
@@ -2457,20 +2555,20 @@
         function saveMainEdit(txId, amount, date, category, description) {
             const tx = transactions.find(t => t.id === txId);
             if (!tx) return;
-            
+
             tx.amount = amount;
             tx.date = date;
             tx.category = category;
             tx.description = description;
-            
+
             saveTransactions();
             updateDashboard();
             renderTransactions();
-            
+
             if (document.getElementById('allTransactionsPage').classList.contains('active')) {
                 renderAllTransactions();
             }
-            
+
             closeModal();
             showToast('Transaction updated');
         }
@@ -2478,20 +2576,20 @@
         function saveSideLedgerEdit(txId, amount, date, category, description) {
             const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
             if (!ledger) return;
-            
+
             const tx = ledger.transactions.find(t => t.id === txId);
             if (!tx) return;
-            
+
             tx.amount = amount;
             tx.date = date;
             tx.category = category;
             tx.description = description;
-            
+
             saveSideLedgers();
             updateSideLedgerDashboard();
             renderSideLedgerTransactions();
             renderSideLedgersList();
-            
+
             closeModal();
             showToast('Transaction updated');
         }
@@ -2508,15 +2606,15 @@
                 date: data.date,
                 timestamp: Date.now()
             };
-            
+
             // Save description for future use
             if (tx.description) {
                 addDescription(tx.description);
             }
-            
+
             // Save amount for future use
             addAmount(tx.amount);
-            
+
             transactions.push(tx);
             saveTransactions();
             updateDashboard();
@@ -2539,7 +2637,7 @@
 
         function clearAllTransactions() {
             if (transactions.length === 0) return;
-            
+
             if (confirm('Are you sure you want to delete all transactions? This cannot be undone.')) {
                 transactions = [];
                 saveTransactions();
@@ -2591,7 +2689,7 @@
             sorted.forEach((tx) => {
                 const sign = tx.category === 'received' ? '+' : '-';
                 const categoryArabic = tx.category === 'received' ? translations.received : translations.spent;
-                
+
                 text += `${categoryArabic}\n`;
                 text += `${translations.amount}: ${sign}$${tx.amount.toFixed(2)}\n`;
                 if (tx.description) {
@@ -2641,7 +2739,7 @@
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
-            
+
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 2500);
@@ -2654,7 +2752,7 @@
             // Set default date to today
             const dateInput = document.getElementById('date');
             dateInput.value = new Date().toISOString().split('T')[0];
-            
+
             // Initial render
             updateDashboard();
             renderTransactions();
@@ -2663,26 +2761,26 @@
         // Form submission
         document.getElementById('transactionForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             const formData = {
                 amount: document.getElementById('amount').value,
                 category: document.getElementById('category').value,
                 description: document.getElementById('description').value,
                 date: document.getElementById('date').value
             };
-            
+
             if (!formData.amount || parseFloat(formData.amount) <= 0) {
                 showToast('Please enter a valid amount');
                 return;
             }
-            
+
             addTransaction(formData);
-            
+
             // Reset form
             document.getElementById('amount').value = '';
             document.getElementById('description').value = '';
             document.getElementById('date').value = new Date().toISOString().split('T')[0];
-            
+
             // Reset category toggle
             document.getElementById('category').value = 'spent-his';
             document.querySelectorAll('.category-btn').forEach(btn => {
@@ -2691,7 +2789,7 @@
                     btn.classList.add('active');
                 }
             });
-            
+
             // Refresh recommendations
             updateRecommendations();
             updateAmountRecommendations();
@@ -2749,7 +2847,7 @@
         document.querySelector('.modal').addEventListener('touchmove', (e) => {
             const touchY = e.touches[0].clientY;
             const diff = touchY - touchStartY;
-            
+
             if (diff > 100) {
                 closeModal();
             }
@@ -2767,12 +2865,12 @@
             const recentDeduped = savedDescriptions
                 .filter(d => !isDescriptionPinned(d))
                 .slice(0, 6);
-            
+
             const allChips = [
                 ...pinnedDescriptions.map(d => ({ desc: d, pinned: true })),
                 ...recentDeduped.map(d => ({ desc: d, pinned: false }))
             ];
-            
+
             if (allChips.length === 0) {
                 recommendationsContainer.classList.remove('show');
                 return;
@@ -2854,13 +2952,13 @@
         function updateAmountRecommendations() {
             // Get last 4 amounts
             const recentAmounts = savedAmounts.slice(0, 4);
-            
+
             if (recentAmounts.length === 0) {
                 amountRecommendationsContainer.classList.remove('show');
                 return;
             }
 
-            amountRecommendationsList.innerHTML = recentAmounts.map(amount => 
+            amountRecommendationsList.innerHTML = recentAmounts.map(amount =>
                 `<button type="button" class="recommendation-chip" title="$${amount.toFixed(2)}">$${amount.toFixed(2)}</button>`
             ).join('');
 
@@ -2917,7 +3015,7 @@
 
         function renderSideLedgersList() {
             const list = document.getElementById('sideLedgersList');
-            
+
             if (sideLedgers.length === 0) {
                 list.innerHTML = `
                     <div class="side-ledgers-empty">
@@ -2927,13 +3025,13 @@
                 `;
                 return;
             }
-            
+
             list.innerHTML = sideLedgers.map(ledger => {
                 const balance = calculateSideLedgerBalance(ledger);
                 const balanceClass = balance > 0 ? 'positive' : (balance < 0 ? 'negative' : 'neutral');
                 const sign = balance >= 0 ? '' : '-';
                 const txCount = ledger.transactions.length;
-                
+
                 return `
                     <div class="side-ledger-card" data-id="${ledger.id}">
                         <div class="side-ledger-card-header">
@@ -2946,19 +3044,19 @@
                     </div>
                 `;
             }).join('');
-            
+
             // Add click listeners
             list.querySelectorAll('.side-ledger-card').forEach(el => {
                 el.addEventListener('click', () => openSideLedgerPage(el.dataset.id));
             });
-            
+
             // Also update drawer
             renderDrawerSideLedgers();
         }
 
         function renderDrawerSideLedgers() {
             const list = document.getElementById('drawerSideLedgersList');
-            
+
             // Update main ledger balance in drawer
             const mainBalance = calculateNetPosition();
             const mainBalanceEl = document.getElementById('drawerMainBalance');
@@ -2966,17 +3064,17 @@
             const mainSign = mainBalance >= 0 ? '' : '-';
             mainBalanceEl.textContent = `${mainSign}$${Math.abs(mainBalance).toFixed(2)}`;
             mainBalanceEl.className = `drawer-item-balance ${mainBalanceClass}`;
-            
+
             if (sideLedgers.length === 0) {
                 list.innerHTML = `<p style="padding: 12px; color: var(--text-muted); font-size: 13px; text-align: center;">No side ledgers yet</p>`;
                 return;
             }
-            
+
             list.innerHTML = sideLedgers.map(ledger => {
                 const balance = calculateSideLedgerBalance(ledger);
                 const balanceClass = balance > 0 ? 'positive' : (balance < 0 ? 'negative' : 'neutral');
                 const sign = balance >= 0 ? '' : '-';
-                
+
                 return `
                     <button class="drawer-item" data-id="${ledger.id}">
                         <div class="drawer-item-icon">📒</div>
@@ -2987,7 +3085,7 @@
                     </button>
                 `;
             }).join('');
-            
+
             // Add click listeners
             list.querySelectorAll('.drawer-item').forEach(el => {
                 el.addEventListener('click', () => {
@@ -3015,7 +3113,7 @@
                 transactions: [],
                 createdAt: Date.now()
             };
-            
+
             sideLedgers.push(ledger);
             saveSideLedgers();
             renderSideLedgersList();
@@ -3035,11 +3133,11 @@
             currentSideLedgerId = id;
             const ledger = sideLedgers.find(l => l.id === id);
             if (!ledger) return;
-            
+
             document.getElementById('sideLedgerPageTitle').textContent = ledger.name;
             document.getElementById('sideLedgerPage').classList.add('active');
             document.body.style.overflow = 'hidden';
-            
+
             // Reset form
             document.getElementById('sideLedgerAmountInput').value = '';
             document.getElementById('sideLedgerDescription').value = '';
@@ -3047,7 +3145,7 @@
             document.getElementById('sideLedgerCategory').value = 'spent-his';
             document.getElementById('sideLedgerSpentBtn').classList.add('active');
             document.getElementById('sideLedgerReceivedBtn').classList.remove('active');
-            
+
             updateSideLedgerDashboard();
             renderSideLedgerTransactions();
         }
@@ -3061,13 +3159,13 @@
         function updateSideLedgerDashboard() {
             const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
             if (!ledger) return;
-            
+
             const dashboard = document.getElementById('sideLedgerDashboard');
             const amountEl = document.getElementById('sideLedgerAmount');
             const descEl = document.getElementById('sideLedgerDesc');
-            
+
             const balance = calculateSideLedgerBalance(ledger);
-            
+
             dashboard.classList.remove('positive', 'negative', 'neutral');
             if (balance > 0) {
                 dashboard.classList.add('positive');
@@ -3076,7 +3174,7 @@
             } else {
                 dashboard.classList.add('neutral');
             }
-            
+
             const sign = balance >= 0 ? '' : '-';
             amountEl.textContent = `${sign}$${Math.abs(balance).toFixed(2)}`;
             descEl.innerHTML = getPositionDescription(balance);
@@ -3085,12 +3183,12 @@
         function renderSideLedgerTransactions() {
             const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
             if (!ledger) return;
-            
+
             const list = document.getElementById('sideLedgerTransactionsList');
             const countEl = document.getElementById('sideLedgerTxCount');
-            
+
             countEl.textContent = ledger.transactions.length;
-            
+
             if (ledger.transactions.length === 0) {
                 list.innerHTML = `
                     <div class="empty-state">
@@ -3100,20 +3198,20 @@
                 `;
                 return;
             }
-            
+
             const sorted = [...ledger.transactions]
                 .sort((a, b) => {
                     const dateCompare = new Date(b.date) - new Date(a.date);
                     if (dateCompare !== 0) return dateCompare;
                     return b.timestamp - a.timestamp;
                 });
-            
+
             list.innerHTML = sorted.map(tx => {
                 const typeClass = `type-${tx.category}`;
                 const typeLabel = getCategoryLabel(tx.category);
                 const sign = tx.category === 'received' ? '+' : '-';
                 const formattedDate = formatDate(tx.date);
-                
+
                 return `
                     <div class="receipt ${typeClass}" data-id="${tx.id}">
                         <div class="receipt-header">
@@ -3125,7 +3223,7 @@
                     </div>
                 `;
             }).join('');
-            
+
             // Add click listeners for side ledger transactions
             list.querySelectorAll('.receipt').forEach(el => {
                 el.addEventListener('click', () => openSideLedgerModal(el.dataset.id));
@@ -3135,7 +3233,7 @@
         function addSideLedgerTransaction(data) {
             const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
             if (!ledger) return;
-            
+
             const tx = {
                 id: generateId(),
                 amount: parseFloat(data.amount),
@@ -3144,7 +3242,7 @@
                 date: data.date,
                 timestamp: Date.now()
             };
-            
+
             ledger.transactions.push(tx);
             saveSideLedgers();
             updateSideLedgerDashboard();
@@ -3156,7 +3254,7 @@
         function deleteSideLedgerTransaction(txId) {
             const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
             if (!ledger) return;
-            
+
             ledger.transactions = ledger.transactions.filter(tx => tx.id !== txId);
             saveSideLedgers();
             updateSideLedgerDashboard();
@@ -3169,7 +3267,7 @@
         function clearAllSideLedgerTransactions() {
             const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
             if (!ledger || ledger.transactions.length === 0) return;
-            
+
             if (confirm('Are you sure you want to delete all transactions in this ledger? This cannot be undone.')) {
                 ledger.transactions = [];
                 saveSideLedgers();
@@ -3184,46 +3282,46 @@
         function calculateSideLedgerRunningBalance(transactionId) {
             const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
             if (!ledger) return 0;
-            
+
             const sorted = [...ledger.transactions].sort((a, b) => {
                 const dateCompare = new Date(a.date) - new Date(b.date);
                 if (dateCompare !== 0) return dateCompare;
                 return a.timestamp - b.timestamp;
             });
-            
+
             let runningBalance = 0;
             for (const tx of sorted) {
                 if (tx.id === transactionId) {
                     break;
                 }
-                
+
                 if (tx.category === 'received') {
                     runningBalance += tx.amount;
                 } else if (tx.category === 'spent-his') {
                     runningBalance -= tx.amount;
                 }
             }
-            
+
             return runningBalance;
         }
 
         function openSideLedgerModal(txId) {
             const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
             if (!ledger) return;
-            
+
             const tx = ledger.transactions.find(t => t.id === txId);
             if (!tx) return;
-            
+
             selectedTransactionId = txId;
-            
+
             const detailsEl = document.getElementById('modalDetails');
             const sign = tx.category === 'received' ? '+' : '-';
             const colorClass = tx.category === 'received' ? 'green' : 'red';
-            
+
             const runningBalance = calculateSideLedgerRunningBalance(txId);
             const balanceSign = runningBalance >= 0 ? '' : '-';
             const balanceColorClass = runningBalance > 0 ? 'green' : (runningBalance < 0 ? 'red' : '');
-            
+
             detailsEl.innerHTML = `
                 <div class="detail-row">
                     <span class="detail-label">Amount</span>
@@ -3252,14 +3350,14 @@
                 </div>
                 ` : ''}
             `;
-            
+
             // Show actions and reset title
             document.getElementById('modalActions').style.display = 'flex';
             document.querySelector('.modal-title').textContent = 'Transaction Details';
-            
+
             // Set context for side ledger
             editingContext = 'side';
-            
+
             // Update delete button for side ledger context
             const deleteBtn = document.getElementById('deleteBtn');
             deleteBtn.onclick = () => {
@@ -3267,29 +3365,29 @@
                     deleteSideLedgerTransaction(txId);
                 }
             };
-            
+
             // Edit button for side ledger context
             const editBtn = document.getElementById('editBtn');
             editBtn.onclick = () => {
                 showEditForm(tx);
             };
-            
+
             document.getElementById('modalOverlay').classList.add('active');
         }
 
         // =====================
         // Drawer Event Listeners
         // =====================
-        
+
         // Open drawer
         document.getElementById('menuBtn').addEventListener('click', openDrawer);
-        
+
         // Close drawer
         document.getElementById('drawerClose').addEventListener('click', closeDrawer);
         document.getElementById('drawerOverlay').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) closeDrawer();
         });
-        
+
         // Main ledger button in drawer
         document.getElementById('drawerMainLedger').addEventListener('click', () => {
             closeDrawer();
@@ -3302,7 +3400,7 @@
                 closeAllTransactionsPage();
             }
         });
-        
+
         // Create button in drawer
         document.getElementById('drawerCreateBtn').addEventListener('click', () => {
             closeDrawer();
@@ -3314,7 +3412,7 @@
         // =====================
         // Side Ledger Event Listeners
         // =====================
-        
+
         // Create ledger modal
         document.getElementById('createLedgerBtn').addEventListener('click', () => {
             document.getElementById('createLedgerModal').classList.add('active');
@@ -3362,21 +3460,21 @@
         // Side ledger form
         document.getElementById('sideLedgerForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             const formData = {
                 amount: document.getElementById('sideLedgerAmountInput').value,
                 category: document.getElementById('sideLedgerCategory').value,
                 description: document.getElementById('sideLedgerDescription').value,
                 date: document.getElementById('sideLedgerDate').value
             };
-            
+
             if (!formData.amount || parseFloat(formData.amount) <= 0) {
                 showToast('Please enter a valid amount');
                 return;
             }
-            
+
             addSideLedgerTransaction(formData);
-            
+
             // Reset form
             document.getElementById('sideLedgerAmountInput').value = '';
             document.getElementById('sideLedgerDescription').value = '';
@@ -3436,5 +3534,5 @@
         }
     </script>
 </body>
-</html>
 
+</html>
