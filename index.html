@@ -2788,27 +2788,39 @@
             recommendationsList.querySelectorAll('.recommendation-chip').forEach((chip, index) => {
                 const { desc } = allChips[index];
                 let pressTimer = null;
+                let longPressHandled = false;
 
-                // Tap / click — fill description field
+                // Tap / click — fill description field (skip if long press just fired)
                 chip.addEventListener('click', () => {
+                    if (longPressHandled) {
+                        longPressHandled = false;
+                        return;
+                    }
                     descriptionInput.value = desc;
                     descriptionInput.focus();
                 });
 
                 // Right-click (desktop) — toggle pin
+                // Also fires on Android after a long press, so guard with longPressHandled
                 chip.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
+                    if (longPressHandled) {
+                        longPressHandled = false;
+                        return;
+                    }
                     togglePinDescription(desc);
                 });
 
                 // Long press (mobile) — toggle pin
                 chip.addEventListener('touchstart', () => {
+                    longPressHandled = false;
                     pressTimer = setTimeout(() => {
                         pressTimer = null;
+                        longPressHandled = true;
                         chip.classList.add('pinning');
                         setTimeout(() => chip.classList.remove('pinning'), 400);
                         togglePinDescription(desc);
-                    }, 500);
+                    }, 600);
                 }, { passive: true });
 
                 chip.addEventListener('touchend', () => {
