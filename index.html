@@ -1088,8 +1088,33 @@
             word-wrap: break-word;
         }
 
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .edit-btn {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--accent-amber);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--accent-amber);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn:hover {
+            background: var(--accent-amber);
+            color: #000;
+        }
+
         .delete-btn {
-            width: 100%;
+            flex: 1;
             background: transparent;
             border: 1px solid var(--accent-red);
             border-radius: var(--radius-md);
@@ -1099,13 +1124,113 @@
             font-family: inherit;
             color: var(--accent-red);
             cursor: pointer;
-            margin-top: 24px;
             transition: all 0.2s ease;
         }
 
         .delete-btn:hover {
             background: var(--accent-red);
             color: #000;
+        }
+
+        /* Edit Form inside Modal */
+        .modal-edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-edit-form .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .modal-edit-form .form-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-edit-form .form-group input,
+        .modal-edit-form .form-group textarea {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .modal-edit-form .form-group input:focus,
+        .modal-edit-form .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-amber);
+            box-shadow: 0 0 0 3px rgba(255, 181, 71, 0.2);
+        }
+
+        .modal-edit-form .form-group textarea {
+            resize: none;
+            min-height: 60px;
+        }
+
+        .modal-edit-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modal-edit-form .category-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-edit-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .modal-edit-cancel {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-edit-cancel:hover {
+            border-color: var(--border-active);
+            color: var(--text-primary);
+        }
+
+        .modal-edit-save {
+            flex: 1;
+            background: linear-gradient(135deg, var(--accent-amber), #e5a33f);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-edit-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 181, 71, 0.2);
         }
 
         /* Toast Notification */
@@ -1735,7 +1860,10 @@
                 <div id="modalDetails">
                     <!-- Details will be inserted here -->
                 </div>
-                <button class="delete-btn" id="deleteBtn">Delete Transaction</button>
+                <div class="modal-actions" id="modalActions">
+                    <button class="edit-btn" id="editBtn">Edit</button>
+                    <button class="delete-btn" id="deleteBtn">Delete</button>
+                </div>
             </div>
         </div>
     </div>
@@ -2137,12 +2265,25 @@
                 ` : ''}
             `;
             
+            // Show actions and reset title
+            document.getElementById('modalActions').style.display = 'flex';
+            document.querySelector('.modal-title').textContent = 'Transaction Details';
+            
+            // Set context for main ledger
+            editingContext = 'main';
+            
             // Reset delete button for main ledger context
             const deleteBtn = document.getElementById('deleteBtn');
             deleteBtn.onclick = () => {
                 if (confirm('Delete this transaction?')) {
                     deleteTransaction(selectedTransactionId);
                 }
+            };
+            
+            // Edit button for main ledger context
+            const editBtn = document.getElementById('editBtn');
+            editBtn.onclick = () => {
+                showEditForm(tx);
             };
             
             document.getElementById('modalOverlay').classList.add('active');
@@ -2153,6 +2294,154 @@
             document.getElementById('modalOverlay').classList.remove('active');
             document.body.style.overflow = '';
             selectedTransactionId = null;
+            editingContext = null;
+        }
+
+        // =====================
+        // Edit Transaction
+        // =====================
+        // Tracks whether we're editing a main or side ledger transaction
+        let editingContext = null; // null, 'main', or 'side'
+
+        function showEditForm(tx) {
+            const detailsEl = document.getElementById('modalDetails');
+            const actionsEl = document.getElementById('modalActions');
+            
+            // Hide actions buttons
+            actionsEl.style.display = 'none';
+            
+            // Update modal title
+            document.querySelector('.modal-title').textContent = 'Edit Transaction';
+            
+            const isReceived = tx.category === 'received';
+            
+            detailsEl.innerHTML = `
+                <div class="modal-edit-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Amount</label>
+                            <input type="number" id="editAmount" value="${tx.amount.toFixed(2)}" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="editDate" value="${tx.date}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <div class="category-toggle">
+                            <button type="button" class="category-btn spent ${!isReceived ? 'active' : ''}" id="editSpentBtn">
+                                <span class="dot"></span>
+                                Spent
+                            </button>
+                            <button type="button" class="category-btn received ${isReceived ? 'active' : ''}" id="editReceivedBtn">
+                                <span class="dot"></span>
+                                Received
+                            </button>
+                        </div>
+                        <input type="hidden" id="editCategory" value="${tx.category}">
+                    </div>
+                    <div class="form-group">
+                        <label>Description (Optional)</label>
+                        <textarea id="editDescription" placeholder="What was this for?">${tx.description ? escapeHtml(tx.description) : ''}</textarea>
+                    </div>
+                    <div class="modal-edit-actions">
+                        <button type="button" class="modal-edit-cancel" id="editCancelBtn">Cancel</button>
+                        <button type="button" class="modal-edit-save" id="editSaveBtn">Save</button>
+                    </div>
+                </div>
+            `;
+            
+            // Category toggle listeners
+            document.getElementById('editSpentBtn').addEventListener('click', () => {
+                document.getElementById('editSpentBtn').classList.add('active');
+                document.getElementById('editReceivedBtn').classList.remove('active');
+                document.getElementById('editCategory').value = 'spent-his';
+            });
+            
+            document.getElementById('editReceivedBtn').addEventListener('click', () => {
+                document.getElementById('editReceivedBtn').classList.add('active');
+                document.getElementById('editSpentBtn').classList.remove('active');
+                document.getElementById('editCategory').value = 'received';
+            });
+            
+            // Cancel button
+            document.getElementById('editCancelBtn').addEventListener('click', () => {
+                // Re-open the detail view
+                if (editingContext === 'side') {
+                    openSideLedgerModal(selectedTransactionId);
+                } else {
+                    openModal(selectedTransactionId);
+                }
+            });
+            
+            // Save button
+            document.getElementById('editSaveBtn').addEventListener('click', () => {
+                const newAmount = parseFloat(document.getElementById('editAmount').value);
+                const newDate = document.getElementById('editDate').value;
+                const newCategory = document.getElementById('editCategory').value;
+                const newDescription = document.getElementById('editDescription').value.trim();
+                
+                if (!newAmount || newAmount <= 0) {
+                    showToast('Please enter a valid amount');
+                    return;
+                }
+                if (!newDate) {
+                    showToast('Please enter a valid date');
+                    return;
+                }
+                
+                if (editingContext === 'side') {
+                    saveSideLedgerEdit(selectedTransactionId, newAmount, newDate, newCategory, newDescription);
+                } else {
+                    saveMainEdit(selectedTransactionId, newAmount, newDate, newCategory, newDescription);
+                }
+            });
+            
+            // Focus amount field
+            document.getElementById('editAmount').focus();
+        }
+
+        function saveMainEdit(txId, amount, date, category, description) {
+            const tx = transactions.find(t => t.id === txId);
+            if (!tx) return;
+            
+            tx.amount = amount;
+            tx.date = date;
+            tx.category = category;
+            tx.description = description;
+            
+            saveTransactions();
+            updateDashboard();
+            renderTransactions();
+            
+            if (document.getElementById('allTransactionsPage').classList.contains('active')) {
+                renderAllTransactions();
+            }
+            
+            closeModal();
+            showToast('Transaction updated');
+        }
+
+        function saveSideLedgerEdit(txId, amount, date, category, description) {
+            const ledger = sideLedgers.find(l => l.id === currentSideLedgerId);
+            if (!ledger) return;
+            
+            const tx = ledger.transactions.find(t => t.id === txId);
+            if (!tx) return;
+            
+            tx.amount = amount;
+            tx.date = date;
+            tx.category = category;
+            tx.description = description;
+            
+            saveSideLedgers();
+            updateSideLedgerDashboard();
+            renderSideLedgerTransactions();
+            renderSideLedgersList();
+            
+            closeModal();
+            showToast('Transaction updated');
         }
 
         // =====================
@@ -2866,12 +3155,25 @@
                 ` : ''}
             `;
             
+            // Show actions and reset title
+            document.getElementById('modalActions').style.display = 'flex';
+            document.querySelector('.modal-title').textContent = 'Transaction Details';
+            
+            // Set context for side ledger
+            editingContext = 'side';
+            
             // Update delete button for side ledger context
             const deleteBtn = document.getElementById('deleteBtn');
             deleteBtn.onclick = () => {
                 if (confirm('Delete this transaction?')) {
                     deleteSideLedgerTransaction(txId);
                 }
+            };
+            
+            // Edit button for side ledger context
+            const editBtn = document.getElementById('editBtn');
+            editBtn.onclick = () => {
+                showEditForm(tx);
             };
             
             document.getElementById('modalOverlay').classList.add('active');
