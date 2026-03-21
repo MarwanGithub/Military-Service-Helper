@@ -641,6 +641,21 @@
             transform: scale(0.95);
         }
 
+        .recommendation-chip.pinned {
+            border-color: var(--accent-amber);
+            color: var(--accent-amber);
+        }
+
+        .recommendation-chip.pinned::before {
+            content: '📌 ';
+            font-size: 10px;
+        }
+
+        .recommendation-chip.pinning {
+            outline: 2px solid var(--accent-amber);
+            outline-offset: 2px;
+        }
+
         .submit-btn {
             width: 100%;
             max-width: 100%;
@@ -1877,12 +1892,14 @@
         // =====================
         const STORAGE_KEY = 'debt_ledger_transactions';
         const DESCRIPTIONS_KEY = 'debt_ledger_descriptions';
+        const PINNED_DESCRIPTIONS_KEY = 'debt_ledger_pinned_descriptions';
         const AMOUNTS_KEY = 'debt_ledger_amounts';
         const SIDE_LEDGERS_KEY = 'debt_ledger_side_ledgers';
         
         let transactions = loadTransactions();
         let selectedTransactionId = null;
         let savedDescriptions = loadDescriptions();
+        let pinnedDescriptions = loadPinnedDescriptions();
         let savedAmounts = loadAmounts();
         let sideLedgers = loadSideLedgers();
         let currentSideLedgerId = null;
@@ -1943,6 +1960,41 @@
             }
             
             saveDescriptions();
+        }
+
+        function loadPinnedDescriptions() {
+            try {
+                const data = localStorage.getItem(PINNED_DESCRIPTIONS_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error('Error loading pinned descriptions:', e);
+                return [];
+            }
+        }
+
+        function savePinnedDescriptions() {
+            try {
+                localStorage.setItem(PINNED_DESCRIPTIONS_KEY, JSON.stringify(pinnedDescriptions));
+            } catch (e) {
+                console.error('Error saving pinned descriptions:', e);
+            }
+        }
+
+        function togglePinDescription(desc) {
+            const idx = pinnedDescriptions.findIndex(d => d.toLowerCase() === desc.toLowerCase());
+            if (idx === -1) {
+                pinnedDescriptions.push(desc);
+                showToast('Description pinned');
+            } else {
+                pinnedDescriptions.splice(idx, 1);
+                showToast('Description unpinned');
+            }
+            savePinnedDescriptions();
+            updateRecommendations();
+        }
+
+        function isDescriptionPinned(desc) {
+            return pinnedDescriptions.some(d => d.toLowerCase() === desc.toLowerCase());
         }
 
         function getMatchingDescriptions(input) {
@@ -2711,26 +2763,67 @@
         const recommendationsList = document.getElementById('recommendationsList');
 
         function updateRecommendations() {
-            // Get last 6 descriptions
-            const recentDescriptions = savedDescriptions.slice(0, 6);
+            // Pinned always shown, then recent (deduped against pinned), up to 6
+            const recentDeduped = savedDescriptions
+                .filter(d => !isDescriptionPinned(d))
+                .slice(0, 6);
             
-            if (recentDescriptions.length === 0) {
+            const allChips = [
+                ...pinnedDescriptions.map(d => ({ desc: d, pinned: true })),
+                ...recentDeduped.map(d => ({ desc: d, pinned: false }))
+            ];
+            
+            if (allChips.length === 0) {
                 recommendationsContainer.classList.remove('show');
                 return;
             }
 
-            recommendationsList.innerHTML = recentDescriptions.map(desc => 
-                `<button type="button" class="recommendation-chip" title="${escapeHtml(desc)}">${escapeHtml(desc)}</button>`
+            recommendationsList.innerHTML = allChips.map(({ desc, pinned }) =>
+                `<button type="button" class="recommendation-chip${pinned ? ' pinned' : ''}" title="${escapeHtml(desc)}${pinned ? '' : ' (long press to pin)'}">${escapeHtml(desc)}</button>`
             ).join('');
 
             recommendationsContainer.classList.add('show');
 
-            // Add click listeners
+            // Attach click + long-press + right-click listeners
             recommendationsList.querySelectorAll('.recommendation-chip').forEach((chip, index) => {
+                const { desc } = allChips[index];
+                let pressTimer = null;
+
+                // Tap / click — fill description field
                 chip.addEventListener('click', () => {
-                    descriptionInput.value = recentDescriptions[index];
+                    descriptionInput.value = desc;
                     descriptionInput.focus();
                 });
+
+                // Right-click (desktop) — toggle pin
+                chip.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    togglePinDescription(desc);
+                });
+
+                // Long press (mobile) — toggle pin
+                chip.addEventListener('touchstart', () => {
+                    pressTimer = setTimeout(() => {
+                        pressTimer = null;
+                        chip.classList.add('pinning');
+                        setTimeout(() => chip.classList.remove('pinning'), 400);
+                        togglePinDescription(desc);
+                    }, 500);
+                }, { passive: true });
+
+                chip.addEventListener('touchend', () => {
+                    if (pressTimer) {
+                        clearTimeout(pressTimer);
+                        pressTimer = null;
+                    }
+                });
+
+                chip.addEventListener('touchmove', () => {
+                    if (pressTimer) {
+                        clearTimeout(pressTimer);
+                        pressTimer = null;
+                    }
+                }, { passive: true });
             });
         }
 
