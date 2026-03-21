@@ -2660,14 +2660,7 @@
             if (e.target === e.currentTarget) closeModal();
         });
 
-        // Delete transaction
-        document.getElementById('deleteBtn').addEventListener('click', () => {
-            if (selectedTransactionId) {
-                if (confirm('Delete this transaction?')) {
-                    deleteTransaction(selectedTransactionId);
-                }
-            }
-        });
+        // Delete transaction — handled via .onclick set dynamically in openModal / openSideLedgerModal
 
         // Clear all
         document.getElementById('clearAllBtn').addEventListener('click', clearAllTransactions);
