@@ -1730,6 +1730,271 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(255, 181, 71, 0.2);
         }
+
+        /* =====================
+           Military Service Tracker
+           ===================== */
+        .service-tracker {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 18px 20px;
+            margin-bottom: 20px;
+            animation: fadeUp 0.6s ease-out 0.15s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-tracker::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4a7c59, transparent);
+            opacity: 0.8;
+        }
+
+        .service-tracker-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .service-tracker-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .service-tracker-title::before {
+            content: '⭐';
+            font-size: 12px;
+        }
+
+        .service-reset-link {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 11px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0;
+            transition: color 0.2s ease;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .service-reset-link:hover {
+            color: var(--accent-red);
+        }
+
+        /* Idle state */
+        .service-idle {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .service-start-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4a7c59, #3a6148);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 13px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .service-start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(74, 124, 89, 0.3);
+        }
+
+        .service-start-btn:active {
+            transform: translateY(0);
+        }
+
+        .service-past-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            padding: 0;
+            transition: color 0.2s ease;
+        }
+
+        .service-past-toggle:hover {
+            color: var(--text-secondary);
+        }
+
+        .service-past-picker {
+            display: none;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .service-past-picker.show {
+            display: flex;
+        }
+
+        .service-past-picker input[type="date"] {
+            flex: 1;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-active);
+            border-radius: var(--radius-sm);
+            padding: 8px 10px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-primary);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .service-past-picker input[type="date"]:focus {
+            outline: none;
+            border-color: #4a7c59;
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.2);
+        }
+
+        .service-past-confirm {
+            background: #4a7c59;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .service-past-confirm:hover {
+            background: #3a6148;
+        }
+
+        /* Active state */
+        .service-active {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .service-day-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .service-day-badge {
+            background: linear-gradient(135deg, #4a7c59, #3a6148);
+            border-radius: var(--radius-md);
+            padding: 10px 16px;
+            text-align: center;
+            min-width: 80px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(74, 124, 89, 0.25);
+        }
+
+        .service-day-number {
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .service-day-of {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.65);
+            margin-top: 3px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .service-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .service-leave-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .service-leave-date {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .service-leave-countdown {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .service-progress-bar {
+            height: 5px;
+            background: var(--bg-elevated);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .service-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a7c59, #6aaf80);
+            border-radius: 99px;
+            transition: width 0.5s ease;
+        }
+
+        /* Complete state */
+        .service-complete {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: center;
+        }
+
+        .service-complete-badge {
+            font-size: 28px;
+        }
+
+        .service-complete-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .service-complete-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
     </style>
 </head>
 
@@ -1752,6 +2017,9 @@
                 Train
             </a>
         </header>
+
+        <!-- Military Service Tracker -->
+        <section class="service-tracker" id="serviceTracker"></section>
 
         <!-- Dashboard -->
         <section class="dashboard neutral" id="dashboard">
@@ -3532,6 +3800,153 @@
                     });
             });
         }
+
+        // =====================
+        // Military Service Tracker
+        // =====================
+        const SERVICE_KEY = 'military_service_start';
+        const SERVICE_DAYS = 19;
+        const OFF_DAYS = 10;
+
+        function getServiceStartDate() {
+            const stored = localStorage.getItem(SERVICE_KEY);
+            return stored ? new Date(stored + 'T00:00:00') : null;
+        }
+
+        function saveServiceStartDate(dateStr) {
+            localStorage.setItem(SERVICE_KEY, dateStr);
+        }
+
+        function clearServiceStartDate() {
+            localStorage.removeItem(SERVICE_KEY);
+        }
+
+        function daysBetween(a, b) {
+            // Number of whole calendar days from a to b
+            const msPerDay = 24 * 60 * 60 * 1000;
+            const aDay = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+            const bDay = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+            return Math.round((bDay - aDay) / msPerDay);
+        }
+
+        function addDays(date, n) {
+            const d = new Date(date);
+            d.setDate(d.getDate() + n);
+            return d;
+        }
+
+        function formatServiceDate(date) {
+            return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        }
+
+        function getLocalDateStr(date) {
+            // Use local calendar date (not UTC) to avoid timezone day-shift bugs
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function renderServiceTracker() {
+            const el = document.getElementById('serviceTracker');
+            const startDate = getServiceStartDate();
+            const today = new Date();
+
+            // ── Header (always shown) ──
+            const headerHtml = `
+                <div class="service-tracker-header">
+                    <span class="service-tracker-title">Service Tracker</span>
+                    ${startDate ? `<button class="service-reset-link" id="serviceResetBtn">Reset</button>` : ''}
+                </div>`;
+
+            if (!startDate) {
+                // ── IDLE STATE ──
+                const todayStr = getLocalDateStr(today);
+                el.innerHTML = headerHtml + `
+                    <div class="service-idle">
+                        <button class="service-start-btn" id="serviceStartTodayBtn">🪖 Start Service Today</button>
+                        <button class="service-past-toggle" id="servicePastToggle">▾ I started a few days ago…</button>
+                        <div class="service-past-picker" id="servicePastPicker">
+                            <input type="date" id="servicePastDate" max="${todayStr}" value="${todayStr}">
+                            <button class="service-past-confirm" id="servicePastConfirmBtn">Set</button>
+                        </div>
+                    </div>`;
+
+                document.getElementById('serviceStartTodayBtn').addEventListener('click', () => {
+                    saveServiceStartDate(getLocalDateStr(today));
+                    renderServiceTracker();
+                });
+
+                document.getElementById('servicePastToggle').addEventListener('click', () => {
+                    const picker = document.getElementById('servicePastPicker');
+                    picker.classList.toggle('show');
+                    if (picker.classList.contains('show')) {
+                        document.getElementById('servicePastDate').focus();
+                    }
+                });
+
+                document.getElementById('servicePastConfirmBtn').addEventListener('click', () => {
+                    const val = document.getElementById('servicePastDate').value;
+                    if (!val) { showToast('Please pick a date'); return; }
+                    const picked = new Date(val + 'T00:00:00');
+                    if (picked > today) { showToast('Date cannot be in the future'); return; }
+                    saveServiceStartDate(val);
+                    renderServiceTracker();
+                });
+
+            } else {
+                const dayNumber = daysBetween(startDate, today) + 1; // day 1 = start day
+                const leaveDate = addDays(startDate, SERVICE_DAYS); // 20th day = departure
+                const daysUntilLeave = daysBetween(today, leaveDate);
+
+                if (dayNumber > SERVICE_DAYS) {
+                    // ── COMPLETE STATE ──
+                    const nextStartDate = addDays(startDate, SERVICE_DAYS + OFF_DAYS);
+                    el.innerHTML = headerHtml + `
+                        <div class="service-complete">
+                            <div class="service-complete-badge">🎖️</div>
+                            <div class="service-complete-text">Service cycle complete!</div>
+                            <div class="service-complete-sub">Next cycle starts around ${formatServiceDate(nextStartDate)}</div>
+                        </div>`;
+                } else {
+                    // ── ACTIVE STATE ──
+                    const progressPct = Math.min(100, Math.round((dayNumber / SERVICE_DAYS) * 100));
+                    const countdownText = daysUntilLeave === 0
+                        ? 'Leaving today! 🎉'
+                        : daysUntilLeave === 1
+                            ? '1 day left'
+                            : `${daysUntilLeave} days left`;
+
+                    el.innerHTML = headerHtml + `
+                        <div class="service-active">
+                            <div class="service-day-row">
+                                <div class="service-day-badge">
+                                    <div class="service-day-number">${dayNumber}</div>
+                                    <div class="service-day-of">of ${SERVICE_DAYS}</div>
+                                </div>
+                                <div class="service-info">
+                                    <div class="service-leave-label">Leave date</div>
+                                    <div class="service-leave-date">${formatServiceDate(leaveDate)}</div>
+                                    <div class="service-leave-countdown">${countdownText}</div>
+                                </div>
+                            </div>
+                            <div class="service-progress-bar">
+                                <div class="service-progress-fill" style="width: ${progressPct}%"></div>
+                            </div>
+                        </div>`;
+                }
+
+                document.getElementById('serviceResetBtn').addEventListener('click', () => {
+                    if (confirm('Reset service tracker? This will clear your current service period.')) {
+                        clearServiceStartDate();
+                        renderServiceTracker();
+                    }
+                });
+            }
+        }
+
+        // Initial render
+        renderServiceTracker();
     </script>
 </body>
 
