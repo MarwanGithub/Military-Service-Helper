@@ -722,17 +722,6 @@
             outline-offset: 2px;
         }
 
-        .recommendation-chip.dragging {
-            opacity: 0.35;
-            transform: scale(0.95);
-        }
-
-        .recommendation-chip.drag-over {
-            border-color: var(--accent-green);
-            box-shadow: 0 0 0 2px var(--accent-green-glow);
-            transform: scale(1.05);
-        }
-
         .submit-btn {
             width: 100%;
             max-width: 100%;
@@ -3139,38 +3128,6 @@
         const recommendationsContainer = document.getElementById('recommendationsContainer');
         const recommendationsList = document.getElementById('recommendationsList');
 
-        // Drag-to-reorder state
-        let descDragSrcIndex = null;
-
-        function reorderDescChips(fromIndex, toIndex) {
-            if (fromIndex === toIndex) return;
-
-            // Rebuild combined list the same way updateRecommendations does
-            const recentDeduped = savedDescriptions
-                .filter(d => !isDescriptionPinned(d))
-                .slice(0, 6);
-            const allChips = [
-                ...pinnedDescriptions.map(d => ({ desc: d, pinned: true })),
-                ...recentDeduped.map(d => ({ desc: d, pinned: false }))
-            ];
-
-            // Reorder
-            const [moved] = allChips.splice(fromIndex, 1);
-            allChips.splice(toIndex, 0, moved);
-
-            // Write back: maintain same pinned/unpinned status but reorder within each group
-            pinnedDescriptions = allChips.filter(c => c.pinned).map(c => c.desc);
-            const newRecentOrder = allChips.filter(c => !c.pinned).map(c => c.desc);
-
-            // Rebuild savedDescriptions keeping the new recent order at the front
-            const oldTail = savedDescriptions.filter(d => !newRecentOrder.some(r => r.toLowerCase() === d.toLowerCase()));
-            savedDescriptions = [...newRecentOrder, ...oldTail];
-
-            savePinnedDescriptions();
-            saveDescriptions();
-            updateRecommendations();
-        }
-
         function updateRecommendations() {
             // Pinned always shown, then recent (deduped against pinned), up to 6
             const recentDeduped = savedDescriptions
@@ -3188,39 +3145,40 @@
             }
 
             recommendationsList.innerHTML = allChips.map(({ desc, pinned }) =>
-                `<button type="button" class="recommendation-chip${pinned ? ' pinned' : ''}" draggable="true" title="${escapeHtml(desc)}${pinned ? '' : ' (long press to pin)'}">${escapeHtml(desc)}</button>`
+                `<button type="button" class="recommendation-chip${pinned ? ' pinned' : ''}" title="${escapeHtml(desc)}${pinned ? '' : ' (long press to pin)'}">${escapeHtml(desc)}</button>`
             ).join('');
 
             recommendationsContainer.classList.add('show');
 
-            // Attach listeners
+            // Attach click + long-press + right-click listeners
             recommendationsList.querySelectorAll('.recommendation-chip').forEach((chip, index) => {
                 const { desc } = allChips[index];
                 let pressTimer = null;
                 let longPressHandled = false;
-                let dragHandled = false;
 
-                // ── Click / tap ──────────────────────────────
+                // Tap / click — fill description field (skip if long press just fired)
                 chip.addEventListener('click', () => {
-                    if (longPressHandled || dragHandled) {
+                    if (longPressHandled) {
                         longPressHandled = false;
-                        dragHandled = false;
                         return;
                     }
                     descriptionInput.value = desc;
                     descriptionInput.focus();
                 });
 
-                // ── Right-click → toggle pin ──────────────────
+                // Right-click (desktop) — toggle pin
+                // Also fires on Android after a long press, so guard with longPressHandled
                 chip.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
-                    if (longPressHandled) { longPressHandled = false; return; }
+                    if (longPressHandled) {
+                        longPressHandled = false;
+                        return;
+                    }
                     togglePinDescription(desc);
                 });
 
-                // ── Long press (touch) → toggle pin ──────────
-                chip.addEventListener('touchstart', (e) => {
-                    if (e.touches.length > 1) return; // ignore multi-touch
+                // Long press (mobile) — toggle pin
+                chip.addEventListener('touchstart', () => {
                     longPressHandled = false;
                     pressTimer = setTimeout(() => {
                         pressTimer = null;
@@ -3232,51 +3190,18 @@
                 }, { passive: true });
 
                 chip.addEventListener('touchend', () => {
-                    if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+                    if (pressTimer) {
+                        clearTimeout(pressTimer);
+                        pressTimer = null;
+                    }
                 });
 
                 chip.addEventListener('touchmove', () => {
-                    if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+                    if (pressTimer) {
+                        clearTimeout(pressTimer);
+                        pressTimer = null;
+                    }
                 }, { passive: true });
-
-                // ── HTML5 Drag-and-drop (desktop + Android Chrome) ──
-                chip.addEventListener('dragstart', (e) => {
-                    descDragSrcIndex = index;
-                    dragHandled = true;
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('text/plain', String(index));
-                    // Defer so the drag image is captured first
-                    requestAnimationFrame(() => chip.classList.add('dragging'));
-                });
-
-                chip.addEventListener('dragend', () => {
-                    chip.classList.remove('dragging');
-                    recommendationsList.querySelectorAll('.recommendation-chip')
-                        .forEach(c => c.classList.remove('drag-over'));
-                    descDragSrcIndex = null;
-                });
-
-                chip.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = 'move';
-                    if (descDragSrcIndex !== null && descDragSrcIndex !== index) {
-                        recommendationsList.querySelectorAll('.recommendation-chip')
-                            .forEach(c => c.classList.remove('drag-over'));
-                        chip.classList.add('drag-over');
-                    }
-                });
-
-                chip.addEventListener('dragleave', () => {
-                    chip.classList.remove('drag-over');
-                });
-
-                chip.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    chip.classList.remove('drag-over');
-                    if (descDragSrcIndex !== null && descDragSrcIndex !== index) {
-                        reorderDescChips(descDragSrcIndex, index);
-                    }
-                });
             });
         }
 
