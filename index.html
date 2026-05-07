@@ -1995,6 +1995,295 @@
             font-size: 12px;
             color: var(--text-muted);
         }
+
+        .service-eos-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(240, 192, 64, 0.08);
+            border: 1px solid rgba(240, 192, 64, 0.2);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            margin-top: 2px;
+        }
+
+        .service-eos-badge-icon {
+            font-size: 14px;
+        }
+
+        .service-eos-badge-text {
+            font-size: 12px;
+            color: #f0c040;
+            font-weight: 600;
+        }
+
+        .service-eos-badge-text span {
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        /* =====================
+           Military End-of-Service Countdown
+           ===================== */
+        .eos-countdown {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            animation: fadeUp 0.6s ease-out 0.12s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .eos-countdown::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #f0c040, transparent);
+            opacity: 0.7;
+        }
+
+        .eos-panel-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 16px 20px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s ease;
+        }
+
+        .eos-panel-toggle:hover {
+            background: rgba(240, 192, 64, 0.04);
+        }
+
+        .eos-panel-toggle-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .eos-panel-toggle-summary {
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            color: #f0c040;
+        }
+
+        .eos-panel-chevron {
+            font-size: 10px;
+            color: var(--text-muted);
+            transition: transform 0.25s ease;
+        }
+
+        .eos-panel-chevron.expanded {
+            transform: rotate(180deg);
+        }
+
+        .eos-panel-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease;
+            padding: 0 20px;
+        }
+
+        .eos-panel-body.show {
+            max-height: 800px;
+            padding: 0 20px 20px;
+        }
+
+        .eos-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .eos-title::before {
+            content: '🏁';
+            font-size: 13px;
+        }
+
+        .eos-main {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .eos-days-number {
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 56px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f0c040, #e8a020);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 4px;
+            text-shadow: none;
+        }
+
+        .eos-days-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        .eos-end-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .eos-progress-track {
+            height: 6px;
+            background: var(--bg-elevated);
+            border-radius: 99px;
+            overflow: hidden;
+            margin: 14px 0 10px;
+        }
+
+        .eos-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f0c040, #e8a020);
+            border-radius: 99px;
+            transition: width 0.6s ease;
+        }
+
+        .eos-progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .eos-toggle-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 9px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+        }
+
+        .eos-toggle-btn:hover {
+            border-color: #f0c040;
+            color: #f0c040;
+            background: rgba(240, 192, 64, 0.08);
+        }
+
+        .eos-toggle-btn .eos-chevron {
+            transition: transform 0.25s ease;
+            font-size: 10px;
+        }
+
+        .eos-toggle-btn.expanded .eos-chevron {
+            transform: rotate(180deg);
+        }
+
+        .eos-month-breakdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, margin-top 0.35s ease;
+            margin-top: 0;
+        }
+
+        .eos-month-breakdown.show {
+            max-height: 600px;
+            margin-top: 12px;
+        }
+
+        .eos-month-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .eos-month-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.15s ease;
+        }
+
+        .eos-month-row.current {
+            border-color: rgba(240, 192, 64, 0.35);
+            background: rgba(240, 192, 64, 0.06);
+        }
+
+        .eos-month-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .eos-month-row.current .eos-month-name {
+            color: #f0c040;
+        }
+
+        .eos-month-days {
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .eos-month-row.current .eos-month-days {
+            color: #f0c040;
+        }
+
+        .eos-done {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .eos-done-badge {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+
+        .eos-done-text {
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f0c040, #00d68f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .eos-done-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
     </style>
 </head>
 
@@ -2020,6 +2309,9 @@
 
         <!-- Military Service Tracker -->
         <section class="service-tracker" id="serviceTracker"></section>
+
+        <!-- End-of-Service Countdown -->
+        <section class="eos-countdown" id="eosCountdown"></section>
 
         <!-- Dashboard -->
         <section class="dashboard neutral" id="dashboard">
@@ -3902,11 +4194,22 @@
                 if (dayNumber > SERVICE_DAYS) {
                     // ── COMPLETE STATE ──
                     const nextStartDate = addDays(startDate, SERVICE_DAYS + OFF_DAYS);
+                    // Calculate EOS days for display
+                    const eosDateRef = new Date(2026, 10, 25);
+                    const todayRef = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                    const eosDaysLeft = Math.round((eosDateRef - todayRef) / (24*60*60*1000));
+                    const eosBadgeHtml = eosDaysLeft > 0 ? `
+                        <div class="service-eos-badge">
+                            <span class="service-eos-badge-icon">🏁</span>
+                            <span class="service-eos-badge-text"><span>${eosDaysLeft}</span> days until end of service</span>
+                        </div>` : '';
+
                     el.innerHTML = headerHtml + `
                         <div class="service-complete">
                             <div class="service-complete-badge">🎖️</div>
                             <div class="service-complete-text">Service cycle complete!</div>
                             <div class="service-complete-sub">Next cycle starts around ${formatServiceDate(nextStartDate)}</div>
+                            ${eosBadgeHtml}
                         </div>`;
                 } else {
                     // ── ACTIVE STATE ──
@@ -3916,6 +4219,16 @@
                         : daysUntilLeave === 1
                             ? '1 day left'
                             : `${daysUntilLeave} days left`;
+
+                    // Calculate EOS days for display
+                    const eosDateRef2 = new Date(2026, 10, 25);
+                    const todayRef2 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                    const eosDaysLeft2 = Math.round((eosDateRef2 - todayRef2) / (24*60*60*1000));
+                    const eosBadgeHtml2 = eosDaysLeft2 > 0 ? `
+                        <div class="service-eos-badge">
+                            <span class="service-eos-badge-icon">🏁</span>
+                            <span class="service-eos-badge-text"><span>${eosDaysLeft2}</span> days until end of service</span>
+                        </div>` : '';
 
                     el.innerHTML = headerHtml + `
                         <div class="service-active">
@@ -3933,6 +4246,7 @@
                             <div class="service-progress-bar">
                                 <div class="service-progress-fill" style="width: ${progressPct}%"></div>
                             </div>
+                            ${eosBadgeHtml2}
                         </div>`;
                 }
 
@@ -3947,6 +4261,125 @@
 
         // Initial render
         renderServiceTracker();
+
+        // =====================
+        // End-of-Service Countdown
+        // =====================
+        const EOS_DATE = new Date(2026, 10, 25); // 25 November 2026 (month is 0-indexed)
+
+        function renderEosCountdown() {
+            const el = document.getElementById('eosCountdown');
+            const today = new Date();
+            const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const eosStart = new Date(EOS_DATE.getFullYear(), EOS_DATE.getMonth(), EOS_DATE.getDate());
+            const msPerDay = 24 * 60 * 60 * 1000;
+            const daysLeft = Math.round((eosStart - todayStart) / msPerDay);
+
+            // Collapsible header that toggles the full panel
+            const toggleHeaderHtml = `
+                <button class="eos-panel-toggle" id="eosPanelToggle">
+                    <span class="eos-title">End of Service</span>
+                    <span class="eos-panel-toggle-right">
+                        <span class="eos-panel-toggle-summary" id="eosPanelSummary">${daysLeft > 0 ? daysLeft + ' days' : 'Done!'}</span>
+                        <span class="eos-panel-chevron" id="eosPanelChevron">▼</span>
+                    </span>
+                </button>`;
+
+            if (daysLeft <= 0) {
+                // Service is done!
+                el.innerHTML = toggleHeaderHtml + `
+                    <div class="eos-panel-body" id="eosPanelBody">
+                        <div class="eos-done">
+                            <div class="eos-done-badge">🎉🪖</div>
+                            <div class="eos-done-text">Military service complete!</div>
+                            <div class="eos-done-sub">Finished on ${EOS_DATE.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                        </div>
+                    </div>`;
+                attachEosPanelToggle();
+                return;
+            }
+
+            // Calculate progress – assume service started around 22 Nov 2025 (~12 months)
+            const SERVICE_START_APPROX = new Date(2025, 10, 22);
+            const totalDays = Math.round((eosStart - SERVICE_START_APPROX) / msPerDay);
+            const elapsed = totalDays - daysLeft;
+            const progressPct = Math.min(100, Math.max(0, Math.round((elapsed / totalDays) * 100)));
+
+            // Build month-by-month breakdown
+            const months = [];
+            let cursor = new Date(todayStart);
+
+            while (cursor < eosStart) {
+                const monthStart = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
+                const monthEnd = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0); // last day of month
+                const effectiveEnd = monthEnd < eosStart ? monthEnd : new Date(eosStart.getTime() - msPerDay);
+                const daysInThisMonth = Math.round((effectiveEnd - monthStart) / msPerDay) + 1;
+
+                const monthName = cursor.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                const isCurrent = (cursor.getMonth() === today.getMonth() && cursor.getFullYear() === today.getFullYear());
+
+                if (daysInThisMonth > 0) {
+                    months.push({ name: monthName, days: daysInThisMonth, isCurrent });
+                }
+
+                // Move to the 1st of next month
+                cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
+            }
+
+            const monthRowsHtml = months.map(m => `
+                <div class="eos-month-row${m.isCurrent ? ' current' : ''}">
+                    <span class="eos-month-name">${m.name}</span>
+                    <span class="eos-month-days">${m.days} day${m.days !== 1 ? 's' : ''}</span>
+                </div>
+            `).join('');
+
+            el.innerHTML = toggleHeaderHtml + `
+                <div class="eos-panel-body" id="eosPanelBody">
+                    <div class="eos-main">
+                        <div class="eos-days-number">${daysLeft}</div>
+                        <div class="eos-days-label">days remaining</div>
+                        <div class="eos-end-date">Service ends ${EOS_DATE.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</div>
+                    </div>
+                    <div class="eos-progress-track">
+                        <div class="eos-progress-fill" style="width: ${progressPct}%"></div>
+                    </div>
+                    <div class="eos-progress-labels">
+                        <span>${progressPct}% done</span>
+                        <span>${daysLeft} days to go</span>
+                    </div>
+                    <button class="eos-toggle-btn" id="eosToggleBtn">
+                        <span>Monthly Breakdown</span>
+                        <span class="eos-chevron">▼</span>
+                    </button>
+                    <div class="eos-month-breakdown" id="eosMonthBreakdown">
+                        <div class="eos-month-list">
+                            ${monthRowsHtml}
+                        </div>
+                    </div>
+                </div>`;
+
+            attachEosPanelToggle();
+
+            // Monthly breakdown toggle
+            document.getElementById('eosToggleBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                const breakdown = document.getElementById('eosMonthBreakdown');
+                breakdown.classList.toggle('show');
+                this.classList.toggle('expanded');
+            });
+        }
+
+        function attachEosPanelToggle() {
+            document.getElementById('eosPanelToggle').addEventListener('click', function() {
+                const body = document.getElementById('eosPanelBody');
+                const chevron = document.getElementById('eosPanelChevron');
+                body.classList.toggle('show');
+                chevron.classList.toggle('expanded');
+            });
+        }
+
+        // Initial render
+        renderEosCountdown();
     </script>
 </body>
 
