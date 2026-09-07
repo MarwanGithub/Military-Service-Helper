@@ -367,6 +367,55 @@
             background: rgba(255, 181, 71, 0.1);
         }
 
+        .drawer-data-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .drawer-data-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid var(--border-active);
+            background: transparent;
+        }
+
+        .drawer-data-btn.export-btn {
+            color: var(--accent-green);
+            border-color: rgba(0, 214, 143, 0.3);
+        }
+
+        .drawer-data-btn.export-btn:hover {
+            background: rgba(0, 214, 143, 0.1);
+            border-color: var(--accent-green);
+            box-shadow: 0 0 12px rgba(0, 214, 143, 0.1);
+        }
+
+        .drawer-data-btn.import-btn {
+            color: var(--accent-amber);
+            border-color: rgba(255, 181, 71, 0.3);
+        }
+
+        .drawer-data-btn.import-btn:hover {
+            background: rgba(255, 181, 71, 0.1);
+            border-color: var(--accent-amber);
+            box-shadow: 0 0 12px rgba(255, 181, 71, 0.1);
+        }
+
+        .drawer-data-btn:active {
+            transform: scale(0.97);
+        }
+
         /* Dashboard Card */
         .dashboard {
             background: var(--bg-card);

@@ -142,6 +142,13 @@
                     </div>
                     <button class="drawer-create-btn" id="drawerCreateBtn">+ Create New Ledger</button>
                 </div>
+                <div class="drawer-section">
+                    <div class="drawer-section-title">Data</div>
+                    <div class="drawer-data-actions">
+                        <button class="drawer-data-btn export-btn" id="exportDataBtn">⬇ Export Data</button>
+                        <button class="drawer-data-btn import-btn" id="importDataBtn">⬆ Import Data</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -278,6 +285,7 @@
 
     <!-- Toast -->
     <div class="toast" id="toast"></div>
+    <input type="file" id="importFileInput" accept=".json" style="display:none;">
 
     <script src="script.js"></script>
 </body>

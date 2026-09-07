@@ -1942,3 +1942,95 @@ function attachEosPanelToggle() {
 
 // Initial render
 renderEosCountdown();
+
+// =====================
+// Export / Import Data
+// =====================
+const ALL_STORAGE_KEYS = [
+    STORAGE_KEY,
+    DESCRIPTIONS_KEY,
+    PINNED_DESCRIPTIONS_KEY,
+    AMOUNTS_KEY,
+    SIDE_LEDGERS_KEY,
+    SERVICE_KEY,
+];
+
+function exportData() {
+    const backup = { _version: 1, _exportedAt: new Date().toISOString() };
+    ALL_STORAGE_KEYS.forEach(key => {
+        const value = localStorage.getItem(key);
+        if (value !== null) backup[key] = value;
+    });
+
+    const json = JSON.stringify(backup, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const date = new Date().toISOString().slice(0, 10);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `debt-ledger-backup-${date}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('Data exported successfully!');
+}
+
+function importData(file) {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const backup = JSON.parse(e.target.result);
+
+            // Basic validation
+            if (typeof backup !== 'object' || backup === null) {
+                showToast('Invalid backup file');
+                return;
+            }
+
+            const hasKnownKey = ALL_STORAGE_KEYS.some(k => k in backup);
+            if (!hasKnownKey) {
+                showToast('File doesn\'t look like a valid backup');
+                return;
+            }
+
+            if (!confirm('This will replace ALL your current data with the backup. Continue?')) return;
+
+            ALL_STORAGE_KEYS.forEach(key => {
+                if (backup[key] !== undefined) {
+                    localStorage.setItem(key, backup[key]);
+                }
+            });
+
+            showToast('Data imported! Reloading…');
+            setTimeout(() => location.reload(), 1200);
+        } catch (err) {
+            console.error('Import error:', err);
+            showToast('Failed to read backup file');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// Wire up the buttons
+document.getElementById('exportDataBtn').addEventListener('click', () => {
+    exportData();
+    // Close the drawer after action
+    document.getElementById('drawerOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+});
+
+document.getElementById('importDataBtn').addEventListener('click', () => {
+    document.getElementById('importFileInput').click();
+});
+
+document.getElementById('importFileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    importData(file);
+    // Reset so the same file can be picked again
+    e.target.value = '';
+});
